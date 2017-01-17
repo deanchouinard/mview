@@ -1,0 +1,6 @@
+    <form action="/save/<%= page %>" method="post">
+      <textarea name="pagetext" rows="20" cols="40">
+<%= page_contents %></textarea>
+
+      <input type="submit" value="Save Page">
+    </form>
