@@ -1,22 +1,18 @@
 defmodule Mview.Page do
   
 
-  def index_page(pages_dir, page) do
-  #    page_path = Path.join(pages_dir, page)
+  def index_page(pages_dir, dirs) do
+    tabs = build_tabs(dirs)
+    page_contents = Enum.map(File.ls!(pages_dir), fn(x) -> 
+                make_file_link(x, pages_dir) end)
 
-    results = Enum.map(File.ls!(pages_dir), fn(x) -> make_file_link(x, pages_dir) end)
-    results = ["<table
-    class=\"table-condensed\"><thead><tr><th>Filename</th><th>Date</th></thead><tbody>" | results]
+    page_contents = ["<table class=\"table-condensed\"><thead><tr><th>Filename</th>
+                <th>Date</th></thead><tbody>" | page_contents]
 
-    results = results ++ ["</tbody></table>"]
+    page_contents = page_contents ++ ["</tbody></table>"]
 
-    IO.inspect results
-
-    #    page_contents = File.read!(page_path)
-    # page_contents = Earmark.to_html(page_contents)
-    page_contents = results
-    build_page("templates/show_page.eex", {page_contents, page})
-
+    IO.inspect page_contents
+    build_page("templates/show_page.eex", {page_contents, tabs})
   end
 
   def bootstrap do
@@ -42,11 +38,17 @@ defmodule Mview.Page do
 
   end
 
-  defp build_page(template, {page_contents, page} = _vars) do
+  defp build_page(template, {page_contents, tabs} = _vars) do
     EEx.eval_file("templates/app.eex", [body:
-      EEx.eval_file(template, [page_contents: page_contents, page: page])
+      EEx.eval_file(template, [page_contents: page_contents, tabs: tabs])
     ])
   end
+
+  # defp build_page(template, {page_contents, page} = _vars) do
+  #   EEx.eval_file("templates/app.eex", [body:
+  #     EEx.eval_file(template, [page_contents: page_contents, page: page])
+  #   ])
+  # end
   
   def search_results(pages_dir, stext) do
     IO.puts "search_results"
@@ -74,5 +76,18 @@ defmodule Mview.Page do
 
   defp dtos(date), do: Date.from_erl!(date) |> Date.to_string
 
+  defp build_tabs(dirs) do
+    tabs = ["<ul class=\"nav nav-tabs\">"]
+    tabs = tabs ++ Enum.map(dirs, fn(x) -> build_list_item(x) end)
+    tabs ++ ["</ul>"]
+
+  end
+
+  defp build_list_item(dir) do
+  "<li class=\"active\"><a href=\"#\">#{dir}</a></li>"
+  # <li><a href=\"#\">Menu 1</a></li>
+  # <li><a href=\"\#\">Menu 2</a></li>
+  # <li><a href=\"#\">Menu 3</a></li>
+  end
 end
 

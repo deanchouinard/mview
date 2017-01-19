@@ -8,6 +8,9 @@ defmodule Mview do
 
     port = Application.get_env(:mview, :cowboy_port, 4000)
 
+    dirs = Mview.Config.read_config()
+    IO.inspect dirs
+
     pages_dir = case Mix.env do
       :test ->
         Path.join(File.cwd!(), "test/pages")
@@ -19,7 +22,7 @@ defmodule Mview do
       File.mkdir!(pages_dir)
     end
 
-    dparams = [ test: "test", pages_dir: pages_dir ]
+    dparams = [ test: "test", pages_dir: pages_dir, dirs: dirs ]
 
     # Define workers and child supervisors to be supervised
     children = [

@@ -1,1 +1,2 @@
+<%= tabs %>
     <%= page_contents %>

@@ -8,7 +8,8 @@ defmodule Mview.Router do
 
   get "/" do
     page_contents =
-      Page.index_page(conn.assigns.my_app_opts[:pages_dir], "index.md")
+      Page.index_page(conn.assigns.my_app_opts[:pages_dir],
+        conn.assigns.my_app_opts[:dirs])
 
     conn
     |> put_resp_content_type("text/html")
