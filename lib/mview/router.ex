@@ -23,6 +23,15 @@ defmodule Mview.Router do
     |> send_resp(200, page_contents)
   end
 
+  get "/tab/*dir" do
+    IO.puts dir
+    page_contents = Page.tab_page(conn.assigns.my_app_opts[:dirs], dir)
+
+    conn
+    |> put_resp_content_type("text/html")
+    |> send_resp(200, page_contents)
+  end
+
   get "/*path" do
     page_contents =
       Page.show_page(conn.assigns.my_app_opts[:pages_dir], path)

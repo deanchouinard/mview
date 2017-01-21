@@ -1,15 +1,27 @@
 defmodule Mview.Page do
   
+  def tab_page(dirs, dir) do
+    IO.puts "dir"
+    IO.inspect dir
+
+    dir_index = Enum.find_index(dirs, fn(x) -> String.replace(x, "/", "") ==
+    List.to_string(dir) end)
+    IO.inspect dir_index
+    IO.inspect Enum.at(dirs, 0) |> String.replace("/", "")
+    IO.inspect List.to_string(dir)
+
+    tabs = build_tabs(dirs, dir)
+    page_contents = file_list(Enum.at(dirs, dir_index))
+
+
+    IO.inspect page_contents
+    build_page("templates/show_page.eex", {page_contents, tabs})
+  end
 
   def index_page(pages_dir, dirs) do
-    tabs = build_tabs(dirs)
-    page_contents = Enum.map(File.ls!(pages_dir), fn(x) -> 
-                make_file_link(x, pages_dir) end)
+    tabs = build_tabs(dirs, pages_dir)
+    page_contents = file_list(pages_dir)
 
-    page_contents = ["<table class=\"table-condensed\"><thead><tr><th>Filename</th>
-                <th>Date</th></thead><tbody>" | page_contents]
-
-    page_contents = page_contents ++ ["</tbody></table>"]
 
     IO.inspect page_contents
     build_page("templates/show_page.eex", {page_contents, tabs})
@@ -76,18 +88,38 @@ defmodule Mview.Page do
 
   defp dtos(date), do: Date.from_erl!(date) |> Date.to_string
 
-  defp build_tabs(dirs) do
+  defp build_tabs(dirs, dir) do
     tabs = ["<ul class=\"nav nav-tabs\">"]
-    tabs = tabs ++ Enum.map(dirs, fn(x) -> build_list_item(x) end)
+    tabs = tabs ++ Enum.map(dirs, fn(x) -> build_list_item(x, dir) end)
     tabs ++ ["</ul>"]
 
   end
 
-  defp build_list_item(dir) do
-  "<li class=\"active\"><a href=\"#\">#{dir}</a></li>"
+  defp build_list_item(dir, match_dir) do
+    IO.puts "match begin"
+    IO.puts dir
+    IO.puts match_dir
+    IO.puts "match end"
+    case dir == match_dir do
+    #"<li><a href=\"/#{dir}\">#{dir}</a></li>"
+      true -> "<li class=\"active\"><a href=\"/tab#{dir}\">#{dir}</a></li>"
+      _    -> "<li><a href=\"/tab#{dir}\">#{dir}</a></li>"
+    end
+
   # <li><a href=\"#\">Menu 1</a></li>
   # <li><a href=\"\#\">Menu 2</a></li>
   # <li><a href=\"#\">Menu 3</a></li>
   end
+
+  defp file_list(pages_dir) do
+    page_contents = Enum.map(File.ls!(pages_dir), fn(x) -> 
+                make_file_link(x, pages_dir) end)
+
+    page_contents = ["<table class=\"table-condensed\"><thead><tr><th>Filename</th>
+                <th>Date</th></thead><tbody>" | page_contents]
+
+    page_contents = page_contents ++ ["</tbody></table>"]
+  end
+
 end
 
