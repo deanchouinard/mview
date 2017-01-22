@@ -1,24 +1,25 @@
-defmodule DwikiIntegrationTest do
+defmodule MviewIntegrationTest do
   use ExUnit.Case
   use Plug.Test
 
-  doctest Dwiki
+  doctest Mview
 
   setup_all do
-    :os.cmd('rm test/pages/*')
+#    :os.cmd('rm test/pages/*')
 
     :ok
   end
 
-  test "shows index.md page" do
+  test "shows index page" do
     response = HTTPoison.get! "http://localhost:4000/"
 
     assert %HTTPoison.Response{status_code: 200} = response
     assert %HTTPoison.Response{body: body} = response
-    assert body =~ "index.md"
+    assert body =~ "first.md"
 
   end
 
+  @tag :pending
   test "edit and save a page" do
     response = HTTPoison.get! "http://localhost:4000/first.md"
 
@@ -45,18 +46,18 @@ defmodule DwikiIntegrationTest do
   end
 
   test "search" do
-    response = HTTPoison.get! "http://localhost:4000/first.md"
+    response = HTTPoison.get! "http://localhost:4000/"
 
     assert %HTTPoison.Response{status_code: 200} = response
     assert %HTTPoison.Response{body: body} = response
     assert body =~ "search"
 
     text = "first"
-    response = HTTPoison.post! "http://localhost:4000/search",
+    response = HTTPoison.post! "http://localhost:4000/search/Writing",
       {:form, [stext: text]}, [{"Content-Type", "application/x-www-form-urlencoded"}]
     assert %HTTPoison.Response{status_code: 200} = response
     assert %HTTPoison.Response{body: body} = response
-    assert body =~ "<a href=first.md>### first.md"
+    assert body =~ "<a href=/page/Writing/first.md>### first.md"
   end
 
 end

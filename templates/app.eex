@@ -15,11 +15,6 @@
     <a href="/">Home</a>
     <hr>
     <%= body %>
-    <hr>
-    <form action="/search" method="post">
-      <input type="text" name="stext">
-      <input type="submit" value="Search">
-    </form>
     </div>
   </body>
 </html>

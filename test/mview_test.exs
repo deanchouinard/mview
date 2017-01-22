@@ -1,24 +1,26 @@
-defmodule DwikiTest do
+defmodule MviewTest do
   use ExUnit.Case
   use Plug.Test
 
-  doctest Dwiki
+  doctest Mview
 
-  @opts Dwiki.Router.init([pages_dir: "/Users/dean/wrk/elixir/dwiki/test/pages"])
+  # @opts Mview.Router.init([pages_dir: "/Users/dean/wrk/elixir/dwiki/test/pages"])
+  @opts Mview.Router.init(dirs:
+  [["/Users/dean/wrk/elixir/dwiki/test/pages","TechNotes"]])
 
   test "plug root" do
     conn = conn(:get, "/", "")
-      |> Dwiki.Router.call(@opts)
+      |> Mview.Router.call(@opts)
 
     assert conn.state == :sent
     assert conn.status == 200
-    assert conn.resp_body =~ "index.md"
+    assert conn.resp_body =~ "first.md"
   end
 
   @tag :skip
   test "plug returns 404" do
     conn = conn(:get, "/missing", "")
-      |> Dwiki.Router.call(@opts)
+      |> Mview.Router.call(@opts)
 
     assert conn.state == :sent
     assert conn.status == 404

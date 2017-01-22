@@ -8,8 +8,7 @@ defmodule Mview.Router do
 
   get "/" do
     page_contents =
-      Page.index_page(conn.assigns.my_app_opts[:pages_dir],
-        conn.assigns.my_app_opts[:dirs])
+      Page.index_page( conn.assigns.my_app_opts[:dirs])
 
     conn
     |> put_resp_content_type("text/html")
@@ -32,18 +31,20 @@ defmodule Mview.Router do
     |> send_resp(200, page_contents)
   end
 
-  get "/*path" do
+  get "/page/*path" do
     page_contents =
-      Page.show_page(conn.assigns.my_app_opts[:pages_dir], path)
+      Page.show_page(conn.assigns.my_app_opts[:dirs], path)
 
     conn
     |> put_resp_content_type("text/html")
     |> send_resp(200, page_contents)
   end
 
-  post "/search" do
+  post "/search/*tab" do
     page_text = conn.params["stext"]
-    page_contents = Page.search_results(conn.assigns.my_app_opts[:pages_dir], page_text)
+    IO.inspect conn
+    page_contents = Page.search_results(conn.assigns.my_app_opts[:dirs],
+    page_text, tab)
 
     conn
     |> put_resp_content_type("text/html")
