@@ -23,7 +23,6 @@ defmodule Mview.Router do
   end
 
   get "/tab/*dir" do
-    IO.puts dir
     page_contents = Page.tab_page(conn.assigns.my_app_opts[:dirs], dir)
 
     conn
@@ -42,7 +41,6 @@ defmodule Mview.Router do
 
   post "/search/*tab" do
     page_text = conn.params["stext"]
-    IO.inspect conn
     page_contents = Page.search_results(conn.assigns.my_app_opts[:dirs],
     page_text, tab)
 

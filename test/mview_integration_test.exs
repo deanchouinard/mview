@@ -12,13 +12,33 @@ defmodule MviewIntegrationTest do
 
   test "shows index page" do
     response = HTTPoison.get! "http://localhost:4000/"
-
     assert %HTTPoison.Response{status_code: 200} = response
     assert %HTTPoison.Response{body: body} = response
     assert body =~ "first.md"
-
   end
 
+  test "shows tab page" do
+    response = HTTPoison.get! "http://localhost:4000/tab/Writing"
+    assert %HTTPoison.Response{status_code: 200} = response
+    assert %HTTPoison.Response{body: body} = response
+    assert body =~ "first.md"
+  end
+
+  test "shows a  page" do
+    response = HTTPoison.get! "http://localhost:4000/page/Writing/first.md"
+    assert %HTTPoison.Response{status_code: 200} = response
+    assert %HTTPoison.Response{body: body} = response
+    assert body =~ "another edit"
+  end
+
+  @tag :pending
+  test "builds correct active tab" do
+    label = ["Two"]
+    dirs = "foo"
+    page = Page.tab_page(dirs, label)
+    assert page =~ "<li class=\"active\"><a href=\"/tab/Two}\">Two</a></li>"
+  end
+  
   @tag :pending
   test "edit and save a page" do
     response = HTTPoison.get! "http://localhost:4000/first.md"
