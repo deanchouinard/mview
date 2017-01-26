@@ -14,9 +14,7 @@ defmodule Mview.Page do
     build_page("templates/show_page.eex", {page_contents, tabs})
   end
 
-  def bootstrap do
-    File.read!("static/css/bootstrap.min.css")
-  end
+  def bootstrap, do: File.read!("static/css/bootstrap.min.css")
 
   def show_page(dirs, path) do
     [label, file_name] = path
@@ -62,12 +60,6 @@ defmodule Mview.Page do
 """
   end
 
-  defp make_file_link(file, pages_dir, label) do
-    %File.Stat{mtime: {dt, _tt}} = File.stat!(Path.join(pages_dir, file), time:
-      :local)
-    "<tr><td><a href=/page/#{label}/#{file}>#{file}</a></td><td>#{dtos(dt)}</td></tr>"
-  end
-
   defp dtos(date), do: Date.from_erl!(date) |> Date.to_string
 
   defp build_tabs(dirs, label) do
@@ -84,12 +76,25 @@ defmodule Mview.Page do
   end
 
   defp file_list(pages_dir, label) do
-    page_contents = Enum.map(File.ls!(pages_dir), fn(x) -> 
-                make_file_link(x, pages_dir, label) end)
-    page_contents = ["<table class=\"table-condensed\"><thead><tr><th>Filename</th>
-                <th>Date</th></thead><tbody>" | page_contents]
-    page_contents = page_contents ++ ["</tbody></table>"]
-    page_contents ++ build_search_form(label)
+    File.ls!(pages_dir)
+    |> Enum.map(fn(x) -> get_file_time(x, pages_dir) end)
+    |> Enum.sort(&(&1.d >= &2.d))
+    |> Enum.map(fn(x) -> make_file_link(x.f, x.d, label) end)
+    |> List.insert_at(0, ["<table class=\"table-condensed\"><thead><tr><th>Filename</th>
+                <th>Date</th></thead><tbody>"])
+    |> List.insert_at(-1, ["</tbody></table>"])
+    |> List.insert_at(-1, build_search_form(label))
+  end
+
+  defp get_file_time(file, pages_dir) do
+    %File.Stat{mtime: {dt, _tt}} = File.stat!(Path.join(pages_dir, file), time:
+      :local)
+    %{f: file, d: dt}
+  end
+
+
+  defp make_file_link(file, dt, label) do
+    "<tr><td><a href=/page/#{label}/#{file}>#{file}</a></td><td>#{dtos(dt)}</td></tr>"
   end
 
   def find_active_tab(dirs, label), do: Enum.find(dirs, fn([_a, b] = _x) -> b  == label end)

@@ -22,6 +22,7 @@ defmodule MviewIntegrationTest do
     assert %HTTPoison.Response{status_code: 200} = response
     assert %HTTPoison.Response{body: body} = response
     assert body =~ "first.md"
+    assert body =~ "<li class=\"active\"><a href=\"/tab/Writing\">Writing</a></li>"
   end
 
   test "shows a  page" do
