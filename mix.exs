@@ -7,14 +7,19 @@ defmodule Mvies.Mixfile do
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     escript: escript,
      deps: deps()]
+  end
+
+  def escript do
+    [main_module: Mview]
   end
 
   # Configuration for the OTP application
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :cowboy, :plug, :httpoison],
+    [applications: [:logger, :mix, :eex, :cowboy, :plug, :httpoison],
      mod: {Mview, []}]
   end
 

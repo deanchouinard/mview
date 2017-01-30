@@ -18,9 +18,9 @@ defmodule Mview do
         Path.join(File.cwd!(), "pages")
     end
     
-    unless File.exists?(pages_dir) do
-      File.mkdir!(pages_dir)
-    end
+    # unless File.exists?(pages_dir) do
+    #   File.mkdir!(pages_dir)
+    # end
 
     dparams = [ test: "test", pages_dir: pages_dir, dirs: dirs ]
 
@@ -37,4 +37,10 @@ defmodule Mview do
     opts = [strategy: :one_for_one, name: Mview.Supervisor]
     Supervisor.start_link(children, opts)
   end
+
+  def main(args) do
+    IO.puts "Starting Mview..."
+    :timer.sleep(:infinity)
+  end
+
 end
