@@ -29,7 +29,8 @@ defmodule Mview do
       # Starts a worker by calling: Mview.Worker.start_link(arg1, arg2, arg3)
       # worker(Mview.Worker, [arg1, arg2, arg3]),
       Plug.Adapters.Cowboy.child_spec(:http, Mview.Router, dparams,
-        port: port)
+        port: port),
+      supervisor(Task.Supervisor, [[name: Mview.TaskSupervisor]]),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

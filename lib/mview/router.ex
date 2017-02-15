@@ -7,8 +7,8 @@ defmodule Mview.Router do
   plug :dispatch
 
   get "/" do
-    page_contents =
-      Page.index_page( conn.assigns.my_app_opts[:dirs])
+      page_contents = Task.Supervisor.async(Mview.TaskSupervisor, Page, :index_page,
+       [ conn.assigns.my_app_opts[:dirs] ] ) |> Task.await
 
     conn
     |> put_resp_content_type("text/html")

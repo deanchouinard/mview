@@ -63,9 +63,12 @@ defmodule Mview.Page do
   defp dtos(date), do: Date.from_erl!(date) |> Date.to_string
 
   defp build_tabs(dirs, label) do
-    tabs = ["<ul class=\"nav nav-tabs\">"]
-    tabs = tabs ++ Enum.map(dirs, fn(x) -> build_tab_item(List.last(x), label) end)
-    tabs ++ ["</ul>"]
+    # tabs = ["<ul class=\"nav nav-tabs\">"]
+    # tabs = tabs ++ Enum.map(dirs, fn(x) -> build_tab_item(List.last(x), label) end)
+    # tabs ++ ["</ul>"]
+    [["<ul class=\"nav nav-tabs\">"
+      | Enum.map(dirs, fn(x) -> build_tab_item(List.last(x), label) end) ]
+      | "</ul>"]
   end
 
   defp build_tab_item(label, match_label) do
