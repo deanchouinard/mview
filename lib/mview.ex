@@ -6,7 +6,8 @@ defmodule Mview do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
-    port = Application.get_env(:mview, :cowboy_port, 4000)
+    port = Application.get_env(:mview, :cowboy_port, 4100)
+    IO.puts "Mview running or port: #{port}"
 
     dirs = Mview.Config.read_config()
     IO.inspect dirs
@@ -39,7 +40,7 @@ defmodule Mview do
     Supervisor.start_link(children, opts)
   end
 
-  def main(args) do
+  def main(_args) do
     IO.puts "Starting Mview..."
     :timer.sleep(:infinity)
   end
