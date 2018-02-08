@@ -23,7 +23,7 @@ defmodule Mview do
     #   File.mkdir!(pages_dir)
     # end
 
-    dparams = [ test: "test", pages_dir: pages_dir, dirs: dirs ]
+    dparams = [ test: "test", pages_dir: pages_dir, dirs: dirs, sort: :chron ]
 
     # Define workers and child supervisors to be supervised
     children = [

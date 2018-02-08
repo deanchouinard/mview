@@ -94,7 +94,9 @@ defmodule Mview.Page do
     File.ls!(pages_dir)
     |> Enum.map(fn(x) -> get_file_time(x, pages_dir) end)
     |> Enum.sort(&(&1.d >= &2.d))
+    # |> Enum.sort(&(String.upcase(&1.f) <= String.upcase(&2.f)))
     |> Enum.map(fn(x) -> make_file_link(x.f, x.d, label) end)
+    # |> List.insert_at(0, build_search_form(label))
     |> List.insert_at(0, ["<table class=\"table-condensed\"><thead><tr><th>Filename</th>
                 <th>Date</th></thead><tbody>"])
     |> List.insert_at(-1, ["</tbody></table>"])
@@ -109,7 +111,7 @@ defmodule Mview.Page do
 
 
   defp make_file_link(file, dt, label) do
-    "<tr><td><a href=/page/#{label}/#{file}>#{file}</a></td><td>#{dtos(dt)}</td></tr>"
+    "<tr><td><a href=/page/#{label}/#{URI.encode(file)}>#{file}</a></td><td>#{dtos(dt)}</td></tr>"
   end
 
   def find_active_tab(dirs, label), do: Enum.find(dirs, fn([_a, b] = _x) -> b  == label end)

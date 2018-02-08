@@ -1,4 +1,4 @@
-defmodule Mvies.Mixfile do
+defmodule Mview.Mixfile do
   use Mix.Project
 
   def project do
@@ -19,7 +19,8 @@ defmodule Mvies.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :mix, :eex, :cowboy, :plug, :httpoison],
+    # [applications: [:logger, :mix, :eex, :cowboy, :plug, :httpoison],
+    [applications: [:logger, :mix, :cowboy, :plug ],
      mod: {Mview, []}]
   end
 
