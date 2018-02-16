@@ -25,3 +25,5 @@ erl_crash.dump
 # escript executable
 mview
 
+tags
+

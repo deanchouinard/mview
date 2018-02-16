@@ -10,10 +10,10 @@ defmodule Mview.Page do
   EEx.function_from_file(:def, :bootstrap,
     "static/css/bootstrap.min.css")
 
-  def index_page(dirs) do
+  def index_page(%{dirs: dirs, sort:  sort} ) do
     [pages_dir, label] = List.first(dirs)
     tabs = build_tabs(dirs, label)
-    page_contents = file_list(pages_dir, label)
+    page_contents = file_list(pages_dir, label, sort)
     build_page(page_contents, tabs)
   end
 
@@ -25,16 +25,16 @@ defmodule Mview.Page do
     layout_page_template(show_page_template(page_contents, tabs))
   end
 
-  def tab_page(dirs, [label] = _x) do
+  def tab_page(%{dirs: dirs, sort: sort}, [label] = _x) do
     [pages_dir, label] = find_active_tab(dirs, label)
     tabs = build_tabs(dirs, label)
-    page_contents = file_list(pages_dir, label)
+    page_contents = file_list(pages_dir, label, sort)
     build_page(page_contents, tabs)
   end
 
   # def bootstrap, do: File.read!("static/css/bootstrap.min.css")
 
-  def show_page(dirs, path) do
+  def show_page(%{dirs: dirs}, path) do
     [label, file_name] = path
     [pages_dir, _] = find_active_tab(dirs, label)
     page_path = Path.join(pages_dir, file_name)
@@ -43,7 +43,7 @@ defmodule Mview.Page do
     build_page(page_contents, file_name)
   end
 
-  def search_results(dirs, stext, [label] = _t) do
+  def search_results(%{dirs: dirs}, stext, [label] = _t) do
     ##System.cmd("ack", [stext], cd: pages_dir)
     [pages_dir, _] = find_active_tab(dirs, label)
 
@@ -60,6 +60,35 @@ defmodule Mview.Page do
 
   defp make_link(match, file, label) do
     "<a href=/page/#{label}/#{file}>#{match}</a> #{file}</br>"
+  end
+
+  def build_radio_buttons(sort, label) do
+    chron_checked =
+      case sort do
+        "chron" -> "checked"
+        _       -> ""
+      end
+
+    alpha_checked =
+      case sort do
+        "alpha" -> "checked"
+        _       -> ""
+      end
+
+    """
+    <form name="buttonForm" action="/tab/#{label}/">
+      <label class="radio-inline"><input type="radio" name="sort" onclick="radioClick(this);" value="chron"
+      #{chron_checked}> Chronological<br></label>
+      <label class="radio-inline"><input type="radio" name="sort" onclick="radioClick(this);" value="alpha"
+      #{alpha_checked}> Alphabetical<br></label>
+    </form>
+    <script>
+    function radioClick(myRadio) {
+      console.log(myRadio);
+      myRadio.form.submit();
+      };
+    </script>
+    """
   end
 
   def build_search_form(label) do
@@ -90,17 +119,27 @@ defmodule Mview.Page do
     end
   end
 
-  defp file_list(pages_dir, label) do
+  defp file_list(pages_dir, label, sort) do
     File.ls!(pages_dir)
     |> Enum.map(fn(x) -> get_file_time(x, pages_dir) end)
-    |> Enum.sort(&(&1.d >= &2.d))
+    |> Enum.sort(sel_sort(sort))
+    #|> Enum.sort(&(&1.d >= &2.d))
     # |> Enum.sort(&(String.upcase(&1.f) <= String.upcase(&2.f)))
     |> Enum.map(fn(x) -> make_file_link(x.f, x.d, label) end)
     # |> List.insert_at(0, build_search_form(label))
+    |> List.insert_at(0, build_radio_buttons(sort, label))
     |> List.insert_at(0, ["<table class=\"table-condensed\"><thead><tr><th>Filename</th>
                 <th>Date</th></thead><tbody>"])
     |> List.insert_at(-1, ["</tbody></table>"])
     |> List.insert_at(-1, build_search_form(label))
+  end
+
+  defp sel_sort(sort) do
+    IO.inspect sort, label: "sort"
+    case sort == "chron" do
+      true -> &(&1.d >= &2.d)
+      _    -> &(String.upcase(&1.f) <= String.upcase(&2.f))
+      end
   end
 
   defp get_file_time(file, pages_dir) do

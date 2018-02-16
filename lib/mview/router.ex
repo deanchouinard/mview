@@ -4,11 +4,15 @@ defmodule Mview.Router do
 
   plug Plug.Parsers, parsers: [:urlencoded]
   plug :match
+  plug :load_sort
   plug :dispatch
 
   get "/" do
-      page_contents = Task.Supervisor.async(Mview.TaskSupervisor, Page, :index_page,
-       [ conn.assigns.my_app_opts[:dirs] ] ) |> Task.await
+      # page_contents = Task.Supervisor.async(Mview.TaskSupervisor, Page, :index_page,
+      #  [ conn.assigns.my_app_opts ] ) |> Task.await
+      # conn = load_sort(conn)
+    IO.inspect conn.assigns
+    page_contents = Page.index_page(conn.assigns.my_app_opts)
 
     conn
     |> put_resp_content_type("text/html")
@@ -23,7 +27,7 @@ defmodule Mview.Router do
   end
 
   get "/tab/*dir" do
-    page_contents = Page.tab_page(conn.assigns.my_app_opts[:dirs], dir)
+    page_contents = Page.tab_page(conn.assigns.my_app_opts, dir)
 
     conn
     |> put_resp_content_type("text/html")
@@ -32,7 +36,7 @@ defmodule Mview.Router do
 
   get "/page/*path" do
     page_contents =
-      Page.show_page(conn.assigns.my_app_opts[:dirs], path)
+      Page.show_page(conn.assigns.my_app_opts, path)
 
     conn
     |> put_resp_content_type("text/html")
@@ -41,7 +45,7 @@ defmodule Mview.Router do
 
   post "/search/*tab" do
     page_text = conn.params["stext"]
-    page_contents = Page.search_results(conn.assigns.my_app_opts[:dirs],
+    page_contents = Page.search_results(conn.assigns.my_app_opts,
     page_text, tab)
 
     conn
@@ -76,5 +80,24 @@ defmodule Mview.Router do
     super(conn, opts)
   end
 
+  def load_sort(conn, []) do
+    # IO.inspect conn, label: "conn"
+    # IO.inspect Map.has_key?(conn, :params), label: "Exists"
+    # IO.inspect conn.params, label: "conn params"
+    # IO.inspect Map.has_key?(conn.params, "sort"), label: "Sort Exists"
+    #     IO.inspect conn.params["sort"]
+    #     IO.inspect conn.assigns, label: "assigns"
+    if Map.has_key?(conn.params, "sort") do
+      IO.puts "has sort"
+      lsort = conn.params["sort"]
+      #      lsort = :chron
+      assign(conn, :my_app_opts , %{conn.assigns.my_app_opts | sort: lsort})
+      #IO.inspect conn.assigns.my_app_opts, label: "my app opts"
+        #      conn
+    else
+      IO.puts "no param sort"
+      conn
+    end
+  end
 end
 
