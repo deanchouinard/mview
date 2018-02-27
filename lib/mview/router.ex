@@ -4,14 +4,15 @@ defmodule Mview.Router do
 
   plug Plug.Parsers, parsers: [:urlencoded]
   plug :match
-  plug :load_sort
+  # plug :load_sort
   plug :dispatch
 
   get "/" do
       # page_contents = Task.Supervisor.async(Mview.TaskSupervisor, Page, :index_page,
       #  [ conn.assigns.my_app_opts ] ) |> Task.await
       # conn = load_sort(conn)
-    IO.inspect conn.assigns
+      # IO.inspect conn.assigns
+    conn = load_sort(conn)
     page_contents = Page.index_page(conn.assigns.my_app_opts)
 
     conn
@@ -27,6 +28,7 @@ defmodule Mview.Router do
   end
 
   get "/tab/*dir" do
+    conn = load_sort(conn)
     page_contents = Page.tab_page(conn.assigns.my_app_opts, dir)
 
     conn
@@ -80,7 +82,8 @@ defmodule Mview.Router do
     super(conn, opts)
   end
 
-  def load_sort(conn, []) do
+  # def load_sort(conn, []) do
+  defp load_sort(conn) do
     # IO.inspect conn, label: "conn"
     # IO.inspect Map.has_key?(conn, :params), label: "Exists"
     # IO.inspect conn.params, label: "conn params"

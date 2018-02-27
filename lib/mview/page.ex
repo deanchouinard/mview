@@ -49,6 +49,10 @@ defmodule Mview.Page do
 
     results = Enum.map(File.ls!(pages_dir), fn(x) -> search_file(pages_dir, x,
       stext, label) end)
+    results = ["<table class=\"table-condensed\"><thead><tr><th>Results</th>
+                <th>Filename</th></thead><tbody>" | results]
+    results = List.insert_at(results, -1, ["</tbody></table>"])
+    IO.inspect results, label: "results"
     build_page(results)
   end
 
@@ -59,7 +63,13 @@ defmodule Mview.Page do
   end
 
   defp make_link(match, file, label) do
-    "<a href=/page/#{label}/#{file}>#{match}</a> #{file}</br>"
+    """
+    <tr>
+    <td>
+    <a href=/page/#{label}/#{file}>#{match}</a> </td>
+    <td>#{file}</br> </td>
+    </tr>
+    """
   end
 
   def build_radio_buttons(sort, label) do
@@ -93,11 +103,12 @@ defmodule Mview.Page do
 
   def build_search_form(label) do
 """
-    <hr>
+    <span>
     <form action="/search/#{label}" method="post">
       <input type="text" name="stext">
       <input type="submit" value="Search">
     </form>
+    </span>
 """
   end
 
@@ -126,12 +137,12 @@ defmodule Mview.Page do
     #|> Enum.sort(&(&1.d >= &2.d))
     # |> Enum.sort(&(String.upcase(&1.f) <= String.upcase(&2.f)))
     |> Enum.map(fn(x) -> make_file_link(x.f, x.d, label) end)
-    # |> List.insert_at(0, build_search_form(label))
+    |> List.insert_at(0, build_search_form(label))
     |> List.insert_at(0, build_radio_buttons(sort, label))
     |> List.insert_at(0, ["<table class=\"table-condensed\"><thead><tr><th>Filename</th>
                 <th>Date</th></thead><tbody>"])
     |> List.insert_at(-1, ["</tbody></table>"])
-    |> List.insert_at(-1, build_search_form(label))
+    # |> List.insert_at(-1, build_search_form(label))
   end
 
   defp sel_sort(sort) do
