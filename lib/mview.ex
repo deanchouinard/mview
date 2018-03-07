@@ -11,6 +11,8 @@ defmodule Mview do
 
     dirs = Mview.Config.read_config()
     IO.inspect dirs
+    dirs = read_dir()
+    IO.inspect dirs, label: "read_dir"
 
     pages_dir = case Mix.env do
       :test ->
@@ -43,6 +45,57 @@ defmodule Mview do
   def main(_args) do
     IO.puts "Starting Mview..."
     :timer.sleep(:infinity)
+  end
+
+  def read_dir do
+    cwd = File.cwd!()
+    File.ls!(cwd)
+    |> Enum.filter(fn(x) -> is_dir(x) end)
+    |> Enum.map(fn(x) -> [x, x] end)
+    |> Enum.map(fn(x) -> add_path(x, cwd) end)
+    |> Enum.map(fn(x) -> add_tab_label(x) end)
+
+  end
+
+  defp add_tab_label(x) do
+    [p, l] = x
+    file = File.ls!(p)
+      |> Enum.filter(&has_config_file(&1))
+    case file do
+      [] ->
+        [p, l]
+      _ ->
+        [p, contents(Path.join(p, file))]
+    end
+  end
+
+  defp contents(file) do
+    File.read!(file)
+    |> String.replace("\n", "")
+  end
+
+  defp has_config_file(f) do
+    case f do
+      ".mview_label" ->
+        true
+      _ ->
+        false
+    end
+  end
+
+  defp add_path(x, cwd) do
+    [p, l] = x
+    [Path.join(cwd, p), l]
+  end
+
+  defp is_dir(path) do
+    fstat = File.stat!(path)
+    case fstat.type do
+      :directory ->
+        true
+      _ ->
+        false
+    end
   end
 
 end
