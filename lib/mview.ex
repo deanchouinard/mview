@@ -9,23 +9,27 @@ defmodule Mview do
     port = Application.get_env(:mview, :cowboy_port, 4100)
     IO.puts "Mview running or port: #{port}"
 
-    dirs = Mview.Config.read_config()
-    IO.inspect dirs
-    dirs = read_dir()
-    IO.inspect dirs, label: "read_dir"
-
+    # dirs = Mview.Config.read_config()
+    # IO.inspect dirs
+    cwd = File.cwd!()
     pages_dir = case Mix.env do
       :test ->
-        Path.join(File.cwd!(), "test/pages")
+        Path.join(cwd, "test/pages")
+      :dev ->
+        #        Path.join(cwd, "pages")
+        cwd
       _ ->
-        Path.join(File.cwd!(), "pages")
+        cwd
     end
     
+    dirs = load_subdirs(pages_dir)
+    IO.inspect dirs, label: "dirs"
     # unless File.exists?(pages_dir) do
     #   File.mkdir!(pages_dir)
     # end
 
-    dparams = %{ test: "test", pages_dir: pages_dir, dirs: dirs, sort: "chron" }
+    dparams = %{ dirs: dirs, sort: "chron" }
+    #dparams = %{ test: "test", pages_dir: pages_dir, dirs: dirs, sort: "chron" }
 
     # Define workers and child supervisors to be supervised
     children = [
@@ -47,8 +51,7 @@ defmodule Mview do
     :timer.sleep(:infinity)
   end
 
-  def read_dir do
-    cwd = File.cwd!()
+  def load_subdirs(cwd) do
     File.ls!(cwd)
     |> Enum.filter(fn(x) -> is_dir(x) end)
     |> Enum.map(fn(x) -> [x, x] end)

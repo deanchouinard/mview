@@ -6,5 +6,8 @@ rather than have a config file that sets the tabs, read any subdirs of the
 current director and use them as tabs. Look for a .mview_tab.txt file in
 each subdir for the tab description
 
+if encounter a subdirectory make it a tab link
+but, not sure how this is going to work
+
 move any HTML building functions into their own module
 
