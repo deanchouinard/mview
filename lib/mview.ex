@@ -1,5 +1,6 @@
 defmodule Mview do
   use Application
+  require Logger
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
   # for more information on OTP Applications
@@ -7,7 +8,7 @@ defmodule Mview do
     import Supervisor.Spec, warn: false
 
     port = Application.get_env(:mview, :cowboy_port, 4100)
-    IO.puts "Mview running or port: #{port}"
+    Logger.info("Mview running or port: #{port}")
 
     # dirs = Mview.Config.read_config()
     # IO.inspect dirs
@@ -54,6 +55,7 @@ defmodule Mview do
   def load_subdirs(cwd) do
     File.ls!(cwd)
     |> Enum.filter(fn(x) -> is_dir(x) end)
+    |> Enum.filter(fn(x) -> not_hidden_dir(x) end)
     |> Enum.map(fn(x) -> [x, x] end)
     |> Enum.map(fn(x) -> add_path(x, cwd) end)
     |> Enum.map(fn(x) -> add_tab_label(x) end)
@@ -90,6 +92,10 @@ defmodule Mview do
     [p, l] = x
     [Path.join(cwd, p), l]
   end
+
+  defp not_hidden_dir("." <> _rest), do: false
+  defp not_hidden_dir("_" <> _rest), do: false
+  defp not_hidden_dir(_), do: true
 
   defp is_dir(path) do
     fstat = File.stat!(path)

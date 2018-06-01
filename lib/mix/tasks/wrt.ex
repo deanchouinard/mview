@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Wrt do
+defmodule Mix.Tasks.Mview.Wrt do
   use Mix.Task
 
   @shortdoc "Builds and copies escript to wrt directory"

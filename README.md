@@ -26,6 +26,9 @@ subdirectories.
 4. ./mview
 5. Browse to localhost:4100
 
+### Mix Task
+A mix task to build and copy mview: ``mix wrt``
+
 ### Note about directory structure
 Mview expects to be run in a parent directory with subdirectories containing your
 Markdown files. It does not display the contents of the parent directory other than
