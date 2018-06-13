@@ -2,8 +2,13 @@ defmodule Mview.Router do
   use Plug.Router
   alias Mview.Page
 
-  plug Plug.Parsers, parsers: [:urlencoded]
+  if Mix.env() == :dev do
+    use Plug.Debugger, style: [primary: "#c0392b", accent: "#41B577"]
+  end
+
+  plug Plug.Logger
   plug :match
+  plug Plug.Parsers, parsers: [:urlencoded]
   # plug :load_sort
   plug :dispatch
 

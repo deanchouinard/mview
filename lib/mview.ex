@@ -55,47 +55,32 @@ defmodule Mview do
   def load_subdirs(cwd) do
     File.ls!(cwd)
     |> Enum.filter(fn(x) -> is_dir(x) end)
-    |> Enum.filter(fn(x) -> not_hidden_dir(x) end)
+    |> Enum.reject(fn(x) -> is_hidden_dir(x) end)
     |> Enum.map(fn(x) -> [x, x] end)
-    |> Enum.map(fn(x) -> add_path(x, cwd) end)
+    |> Enum.map(fn(x) -> add_full_path(x, cwd) end)
     |> Enum.map(fn(x) -> add_tab_label(x) end)
-
   end
 
-  defp add_tab_label(x) do
-    [p, l] = x
-    file = File.ls!(p)
-      |> Enum.filter(&has_config_file(&1))
+  defp add_tab_label([path, label]) do
+    file = File.ls!(path) |> Enum.filter(&has_config_file(&1))
     case file do
       [] ->
-        [p, l]
+        [path, label]
       _ ->
-        [p, contents(Path.join(p, file))]
+        [path, contents(Path.join(path, file))]
     end
   end
 
-  defp contents(file) do
-    File.read!(file)
-    |> String.replace("\n", "")
-  end
+  defp contents(file), do: File.read!(file) |> String.replace("\n", "")
 
-  defp has_config_file(f) do
-    case f do
-      ".mview_label" ->
-        true
-      _ ->
-        false
-    end
-  end
+  defp has_config_file(".mview_label"), do: true
+  defp has_config_file(_), do: false
 
-  defp add_path(x, cwd) do
-    [p, l] = x
-    [Path.join(cwd, p), l]
-  end
+  defp add_full_path([dir_name, label], cwd), do: [Path.join(cwd, dir_name), label]
 
-  defp not_hidden_dir("." <> _rest), do: false
-  defp not_hidden_dir("_" <> _rest), do: false
-  defp not_hidden_dir(_), do: true
+  defp is_hidden_dir("." <> _rest), do: true
+  defp is_hidden_dir("_" <> _rest), do: true
+  defp is_hidden_dir(_), do: false
 
   defp is_dir(path) do
     fstat = File.stat!(path)
