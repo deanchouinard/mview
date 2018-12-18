@@ -38,8 +38,7 @@ defmodule Mview.Page do
     [label, file_name] = path
     [pages_dir, _] = find_active_tab(dirs, label)
     page_path = Path.join(pages_dir, file_name)
-    page_contents = File.read!(page_path)
-    page_contents = Earmark.to_html(page_contents)
+    page_contents = File.read!(page_path) |> Earmark.as_html!
     build_page(page_contents, file_name)
   end
 
