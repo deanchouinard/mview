@@ -23,7 +23,7 @@ erl_crash.dump
 /pages
 
 # escript executable
-mview
+/mview
 
 tags
 

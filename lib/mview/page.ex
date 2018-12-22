@@ -1,4 +1,6 @@
 defmodule Mview.Page do
+  alias Mview.Search
+
   require EEx
 
   EEx.function_from_file(:def, :show_page_template,
@@ -43,15 +45,17 @@ defmodule Mview.Page do
   end
 
   def search_results(%{dirs: dirs}, stext, [label] = _t) do
-    ##System.cmd("ack", [stext], cd: pages_dir)
     [pages_dir, _] = find_active_tab(dirs, label)
 
-    results = Enum.map(File.ls!(pages_dir), fn(x) -> search_file(pages_dir, x,
-      stext, label) end)
-    results = ["<table class=\"table-condensed\"><thead><tr><th>Results</th>
+    results = case Search.search(pages_dir, stext) do
+      ["No matches."] -> "No matches"
+      results -> 
+        IO.inspect(results)
+        results = Enum.map(results, fn x -> make_link(x.text, x.fname, label) end)
+        results = ["<table class=\"table-condensed\"><thead><tr><th>Results</th>
                 <th>Filename</th></thead><tbody>" | results]
-    results = List.insert_at(results, -1, ["</tbody></table>"])
-    IO.inspect results, label: "results"
+        results = List.insert_at(results, -1, ["</tbody></table>"])
+    end
     build_page(results)
   end
 
