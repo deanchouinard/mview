@@ -42,8 +42,9 @@ defmodule Mview.Router do
   end
 
   get "/page/*path" do
+    stext = conn.params["stext"]
     page_contents =
-      Page.show_page(conn.assigns.my_app_opts, path)
+      Page.show_page(conn.assigns.my_app_opts, path, stext)
 
     conn
     |> put_resp_content_type("text/html")

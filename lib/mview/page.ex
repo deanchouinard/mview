@@ -36,22 +36,25 @@ defmodule Mview.Page do
 
   # def bootstrap, do: File.read!("static/css/bootstrap.min.css")
 
-  def show_page(%{dirs: dirs}, path) do
+  def show_page(%{dirs: dirs}, path, stext) do
+    IO.inspect path, label: "path: "
     [label, file_name] = path
     [pages_dir, _] = find_active_tab(dirs, label)
     page_path = Path.join(pages_dir, file_name)
-    page_contents = File.read!(page_path) |> Earmark.as_html!
+    page_contents = [ insert_find_script(stext) ]
+    page_contents = [ page_contents | File.read!(page_path) |> Earmark.as_html! ]
     build_page(page_contents, file_name)
   end
 
   def search_results(%{dirs: dirs}, stext, [label] = _t) do
     [pages_dir, _] = find_active_tab(dirs, label)
+    IO.inspect stext, label: "stext: "
 
     results = case Search.search(pages_dir, stext) do
       ["No matches."] -> "No matches"
       results -> 
         IO.inspect(results)
-        results = Enum.map(results, fn x -> make_link(x.text, x.fname, label) end)
+        results = Enum.map(results, fn x -> make_link(x.text, x.fname, label, stext) end)
         results = ["<table class=\"table-condensed\"><thead><tr><th>Results</th>
                 <th>Filename</th></thead><tbody>" | results]
         results = List.insert_at(results, -1, ["</tbody></table>"])
@@ -65,13 +68,21 @@ defmodule Mview.Page do
     |> Enum.map(&(make_link(&1, file, label)))
   end
 
-  defp make_link(match, file, label) do
+  defp make_link(match, file, label, stext) do
     """
     <tr>
     <td>
-    <a href=/page/#{label}/#{file}>#{match}</a> </td>
+    <a href=/page/#{label}/#{file}?stext=#{URI.encode(stext)}>#{match}</a> </td>
     <td>#{file}</br> </td>
     </tr>
+    """
+  end
+
+  defp insert_find_script(stext) do
+    """
+    <script>
+      this.onload = function(){ this.find("#{stext}", 0, 0, 1, 0, 0, 1);}
+    </script>
     """
   end
 
