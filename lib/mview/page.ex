@@ -25,7 +25,7 @@ defmodule Mview.Page do
   defp build_page(page_contents) do
     layout_page_template(search_results_page(page_contents))
   end
-  
+
   defp build_page(page_contents, tabs) do
     layout_page_template(show_page_template(page_contents, tabs))
   end
@@ -47,9 +47,10 @@ defmodule Mview.Page do
     page_contents = case File.stat(page_path) do
       {:ok, %File.Stat{ type: :directory }} -> page_contents = ["directory"]
         add_a_tab(opts, path)
-      { _, _ } -> 
+      { _, _ } ->
         page_contents = [ insert_find_script(stext) ]
-        page_contents = [ page_contents | File.read!(page_path) |> Earmark.as_html!(%Options{breaks: true}) ]
+        page_contents = [ page_contents | File.read!(page_path)
+                        |> Earmark.as_html!(%Earmark.Options{breaks: true}) ]
     end
     build_page(page_contents, file_name)
   end
@@ -60,7 +61,7 @@ defmodule Mview.Page do
 
     results = case Search.search(pages_dir, stext) do
       ["No matches."] -> "No matches"
-      results -> 
+      results ->
         IO.inspect(results)
         results = Enum.map(results, fn x -> make_link(x.text, x.fname, label, stext) end)
         results = ["<table class=\"table-condensed\"><thead><tr><th>Results</th>
@@ -109,10 +110,16 @@ defmodule Mview.Page do
 
     """
     <form name="buttonForm" action="/tab/#{label}/">
-      <label class="radio-inline"><input type="radio" name="sort" onclick="radioClick(this);" value="chron"
-      #{chron_checked}> Chronological<br></label>
-      <label class="radio-inline"><input type="radio" name="sort" onclick="radioClick(this);" value="alpha"
-      #{alpha_checked}> Alphabetical<br></label>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="sort"
+        onclick="radioClick(this)" id="inlineRadio1" value="chron" #{chron_checked}>
+      <label class="form-check-label" for="inlineRadio1"> Chronological</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="sort"
+        onclick="radioClick(this)" id="inlineRadio2" value="alpha" #{alpha_checked}>
+      <label class="form-check-label" for="inlineRadio2">Alphabetical</label>
+    </div>
     </form>
     <script>
     function radioClick(myRadio) {
@@ -125,12 +132,16 @@ defmodule Mview.Page do
 
   def build_search_form(label) do
 """
-    <span>
-    <form action="/search/#{label}" method="post">
-      <input type="text" name="stext">
-      <input type="submit" value="Search">
-    </form>
-    </span>
+<form  action="/search/#{label}" method="post">
+  <div class="form-row">
+    <div class="col-4">
+      <input class="form-control form-control-sm" type="text" placeholder="Search text" name="stext">
+    </div>
+    <div class="col">
+      <button type="submit" class="btn btn-primary btn-sm">Search</button>
+    </div>
+  </div>
+</form>
 """
   end
 
@@ -192,4 +203,3 @@ defmodule Mview.Page do
 
   end
 end
-
