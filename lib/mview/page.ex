@@ -9,8 +9,11 @@ defmodule Mview.Page do
     "templates/app.eex", [:body])
   EEx.function_from_file(:def, :search_results_page,
     "templates/search_results_page.eex", [:page_contents])
+  # EEx.function_from_file(:def, :bootstrap,
+  #   "static/css/bootstrap.min.css")
   EEx.function_from_file(:def, :bootstrap,
-    "static/css/bootstrap.min.css")
+    "/home/deanchouinard/media/bootstrap-4.2.1-dist/css/bootstrap.min.css")
+    # "static/css/bootstrap.min.css")
 
   def index_page(%{dirs: dirs, sort:  sort} ) do
     [pages_dir, label] = List.first(dirs)
@@ -36,13 +39,18 @@ defmodule Mview.Page do
 
   # def bootstrap, do: File.read!("static/css/bootstrap.min.css")
 
-  def show_page(%{dirs: dirs}, path, stext) do
+  def show_page(%{dirs: dirs} = opts, path, stext) do
     IO.inspect path, label: "path: "
     [label, file_name] = path
     [pages_dir, _] = find_active_tab(dirs, label)
     page_path = Path.join(pages_dir, file_name)
-    page_contents = [ insert_find_script(stext) ]
-    page_contents = [ page_contents | File.read!(page_path) |> Earmark.as_html! ]
+    page_contents = case File.stat(page_path) do
+      {:ok, %File.Stat{ type: :directory }} -> page_contents = ["directory"]
+        add_a_tab(opts, path)
+      { _, _ } -> 
+        page_contents = [ insert_find_script(stext) ]
+        page_contents = [ page_contents | File.read!(page_path) |> Earmark.as_html!(%Options{breaks: true}) ]
+    end
     build_page(page_contents, file_name)
   end
 
@@ -139,8 +147,8 @@ defmodule Mview.Page do
 
   defp build_tab_item(label, match_label) do
     case label == match_label do
-      true -> "<li class=\"active\"><a href=\"/tab/#{label}\">#{label}</a></li>"
-      _    -> "<li><a href=\"/tab/#{label}\">#{label}</a></li>"
+      true -> "<li class=\"nav-item\"><a class=\"nav-link active\" href=\"/tab/#{label}\">#{label}</a></li>"
+      _    -> "<li class=\"nav-item\"><a class=\"nav-link\" href=\"/tab/#{label}\">#{label}</a></li>"
     end
   end
 
@@ -179,5 +187,9 @@ defmodule Mview.Page do
   end
 
   def find_active_tab(dirs, label), do: Enum.find(dirs, fn([_a, b] = _x) -> b  == label end)
+
+  def add_a_tab(opts, path) do
+
+  end
 end
 

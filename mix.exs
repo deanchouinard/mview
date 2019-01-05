@@ -20,7 +20,7 @@ defmodule Mview.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # [applications: [:logger, :mix, :eex, :cowboy, :plug, :httpoison],
-    [applications: [:logger, :mix, :cowboy ],
+    [applications: [:logger, :mix, :plug_cowboy ],
      mod: {Mview, []}]
   end
 
@@ -35,7 +35,7 @@ defmodule Mview.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [{:plug_cowboy, "~> 2.0"},
-      {:plug, "~> 1.0"},
+  #    {:plug, "~> 1.0"},
       {:earmark, "~> 1.0"},
       {:httpoison, "~> 0.10.0"},
       {:floki, "~> 0.12.0", only: :test}
