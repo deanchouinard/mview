@@ -1,0 +1,6 @@
+.table-borderless td,
+.table-borderless th {
+  border: 0;
+  padding: 0
+}
+

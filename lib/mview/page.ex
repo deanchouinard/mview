@@ -14,6 +14,8 @@ defmodule Mview.Page do
   EEx.function_from_file(:def, :bootstrap,
     "/home/deanchouinard/media/bootstrap-4.2.1-dist/css/bootstrap.min.css")
     # "static/css/bootstrap.min.css")
+  EEx.function_from_file(:def, :mview_css,
+    "templates/mview.css")
 
   def index_page(%{dirs: dirs, sort:  sort} ) do
     [pages_dir, label] = List.first(dirs)
@@ -170,10 +172,10 @@ defmodule Mview.Page do
     #|> Enum.sort(&(&1.d >= &2.d))
     # |> Enum.sort(&(String.upcase(&1.f) <= String.upcase(&2.f)))
     |> Enum.map(fn(x) -> make_file_link(x.f, x.d, label) end)
+    |> List.insert_at(0, ["</br><table class=\"table table-borderless table-sm\"><thead><tr><th scope=\"col\">Filename</th>
+                <th scope=\"col\">Date</th></thead><tbody>"])
     |> List.insert_at(0, build_search_form(label))
     |> List.insert_at(0, build_radio_buttons(sort, label))
-    |> List.insert_at(0, ["<table class=\"table-condensed\"><thead><tr><th>Filename</th>
-                <th>Date</th></thead><tbody>"])
     |> List.insert_at(-1, ["</tbody></table>"])
     # |> List.insert_at(-1, build_search_form(label))
   end

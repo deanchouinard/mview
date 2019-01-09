@@ -40,6 +40,13 @@ defmodule Mview.Router do
     |> send_resp(200, page_contents)
   end
 
+  get "/static/css/mview.css" do
+    page_contents = Page.mview_css()
+    conn
+    |> put_resp_content_type("text/css")
+    |> send_resp(200, page_contents)
+  end
+
   get "/clean" do
     conn = configure_session(conn, drop: true)
     conn
