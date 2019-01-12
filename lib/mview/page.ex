@@ -172,7 +172,7 @@ defmodule Mview.Page do
     #|> Enum.sort(&(&1.d >= &2.d))
     # |> Enum.sort(&(String.upcase(&1.f) <= String.upcase(&2.f)))
     |> Enum.map(fn(x) -> make_file_link(x.f, x.d, label) end)
-    |> List.insert_at(0, ["</br><table class=\"table table-borderless table-sm\"><thead><tr><th scope=\"col\">Filename</th>
+    |> List.insert_at(0, ["<table class=\"table table-borderless table-sm\"><thead><tr><th style=\"width: 20%\" scope=\"col\">Filename</th>
                 <th scope=\"col\">Date</th></thead><tbody>"])
     |> List.insert_at(0, build_search_form(label))
     |> List.insert_at(0, build_radio_buttons(sort, label))

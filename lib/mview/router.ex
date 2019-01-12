@@ -187,5 +187,9 @@ defmodule Mview.Router do
   defp put_secret_key_base(conn, _) do
     put_in conn.secret_key_base, "jdfdsfslkjfdslkkjdfksldjlksdfjlsjlkljkdfjdslkfsjljslklkddsjfslkdslldksdjlk"
   end
+
+  def init(_) do
+    IO.puts "init called"
+  end
 end
 

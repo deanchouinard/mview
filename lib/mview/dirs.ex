@@ -1,15 +1,26 @@
 defmodule Mview.Dirs do
+  use Agent
+
+  defstruct dirs: [], sort: ""
+
+  def start_link(_) do
+    Agent.start_link(fn -> init_dirs() end, name: __MODULE__)
+  end
+
+  def init_dirs() do
+    dirs = load_subdirs()
+    sort = "chron"
+    struct(Mview.Dirs, [dirs: dirs, sort: sort])
+  end
 
   def load_subdirs() do
     cwd = File.cwd!()
-    pages_dir = case Mix.env do
-      :test ->
-        Path.join(cwd, "test/test_data")
-      :dev ->
-        Path.join(cwd, "test/test_data")
-        # cwd
-      _ ->
+    data_path = Application.get_env(:mview, :data_path)
+    pages_dir = case data_path do
+      nil ->
         cwd
+      _ ->
+        Path.join(cwd, "test/test_data")
     end
     File.cd!(pages_dir)
 
