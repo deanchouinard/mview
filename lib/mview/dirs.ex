@@ -3,8 +3,16 @@ defmodule Mview.Dirs do
 
   defstruct dirs: [], sort: ""
 
-  def start_link(_) do
+  def start_link() do
     Agent.start_link(fn -> init_dirs() end, name: __MODULE__)
+  end
+
+  def update_dirs(new_dirs) do
+    Agent.update(__MODULE__, fn x -> %{x | dirs: new_dirs} end)
+  end
+
+  def get_dparams() do
+    Agent.get(__MODULE__, fn x -> x end)
   end
 
   def init_dirs() do

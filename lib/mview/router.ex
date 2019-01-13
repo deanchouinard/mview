@@ -7,12 +7,6 @@ defmodule Mview.Router do
   end
 
   plug Plug.Logger
-  plug :put_secret_key_base
-  plug Plug.Session, store: :cookie, key: "_mview",
-    encryption_salt: "mview salt blah blah blaha",
-    signing_salt: "dfklj dlkjl eoienl dklsd",
-    key_length: 64,
-    log: :debug
 
   plug :load_session
   plug :match
@@ -57,6 +51,7 @@ defmodule Mview.Router do
 
   get "/tab/*dir" do
     conn = load_sort(conn)
+    IO.inspect dir, label: "dir"
     page_contents = Page.tab_page(conn.assigns.my_app_opts, dir)
 
     conn
@@ -77,23 +72,30 @@ defmodule Mview.Router do
     IO.inspect page_path, label: "page_path"
     IO.inspect conn.assigns, label: "assigns"
 
-    conn = case File.stat(page_path) do
+    {conn, page_contents} = case File.stat(page_path) do
       {:ok, %File.Stat{ type: :directory }} -> 
         #    add_a_tab(opts, path)
-        IO.inspect conn.assigns.my_app_opts.dirs, label: "conn assigns dirs"
-        IO.inspect conn.assigns.my_app_opts.dirs ++ [[page_path, file_name]]
-        new_dirs = conn.assigns.my_app_opts.dirs ++ [[page_path, file_name]]
-        dparams = %{ dirs: new_dirs, sort: "chron" }
-        conn = assign(conn, :my_app_opts, dparams)
-        conn = fetch_session(conn)
-        conn = put_session(conn, :sdirs, dparams)
-        # IO.inspect conn, label: "conn"
-      { _, _ } -> conn
-
+        #    is page_path already in dirs?
+        conn = if not Enum.any?(conn.assigns.my_app_opts.dirs, fn x -> hd(x) == page_path end) do
+          IO.inspect conn.assigns.my_app_opts.dirs, label: "conn assigns dirs"
+          IO.inspect conn.assigns.my_app_opts.dirs ++ [[page_path, file_name]]
+          new_dirs = conn.assigns.my_app_opts.dirs ++ [[page_path, file_name]]
+          dparams = %{ dirs: new_dirs, sort: "chron" }
+          Mview.Dirs.update_dirs(new_dirs)
+          conn = assign(conn, :my_app_opts, dparams)
+        else
+          conn
+        end
+        IO.inspect conn.assigns.my_app_opts, label: "assigns before tab page"
+        IO.inspect file_name, label: "file name before tab page"
+        page_contents = Page.tab_page(conn.assigns.my_app_opts, [file_name])
+        {conn, page_contents}
+      _ ->
+        page_contents =
+        Page.show_page(conn.assigns.my_app_opts, path, stext)
+        {conn, page_contents}
     end
     #    IO.puts "**#{page_contents}**"
-    page_contents =
-      Page.show_page(conn.assigns.my_app_opts, path, stext)
 
     conn
     |> put_resp_content_type("text/html")
@@ -145,22 +147,7 @@ defmodule Mview.Router do
     #end
 
   defp load_session(conn, []) do
-
-    conn = fetch_session(conn)
-    dopt = get_session(conn, :sdirs)
-      
-    conn = case dopt do
-      nil ->
-        IO.puts "no session found"
-        dirs = Mview.Dirs.load_subdirs()
-        dparams = %{ dirs: dirs, sort: "chron" }
-        conn = put_session(conn, :sdirs, dparams)
-        conn = assign(conn, :my_app_opts, dparams)
-      _ -> 
-        IO.puts "session found"
-        conn = assign(conn, :my_app_opts, dopt)
-    end
-
+    conn = assign(conn, :my_app_opts, Mview.Dirs.get_dparams())
   end
 
   # def load_sort(conn, []) do
@@ -184,12 +171,9 @@ defmodule Mview.Router do
     end
   end
 
-  defp put_secret_key_base(conn, _) do
-    put_in conn.secret_key_base, "jdfdsfslkjfdslkkjdfksldjlksdfjlsjlkljkdfjdslkfsjljslklkddsjfslkdslldksdjlk"
-  end
-
   def init(_) do
     IO.puts "init called"
+    Mview.Dirs.start_link()
   end
 end
 
