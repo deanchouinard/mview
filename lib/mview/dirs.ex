@@ -15,6 +15,10 @@ defmodule Mview.Dirs do
     Agent.update(__MODULE__, fn x -> %{x | tab: label} end)
   end
 
+  def update_sort(sort) do
+    Agent.update(__MODULE__, fn x -> %{x | sort: sort} end)
+  end
+
   def get_dparams() do
     Agent.get(__MODULE__, fn x -> x end)
   end

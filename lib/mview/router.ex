@@ -82,8 +82,9 @@ defmodule Mview.Router do
           IO.inspect conn.assigns.my_app_opts.dirs, label: "conn assigns dirs"
           IO.inspect conn.assigns.my_app_opts.dirs ++ [[page_path, file_name]]
           new_dirs = conn.assigns.my_app_opts.dirs ++ [[page_path, file_name]]
-          dparams = %{ dirs: new_dirs, sort: "chron" }
+          # dparams = %{ dirs: new_dirs, sort: "chron" }
           Mview.Dirs.update_dirs(new_dirs)
+          dparams = Mview.Dirs.get_dparams()
           conn = assign(conn, :my_app_opts, dparams)
         else
           conn
@@ -164,6 +165,7 @@ defmodule Mview.Router do
       IO.puts "has sort"
       lsort = conn.params["sort"]
       #      lsort = :chron
+      Mview.Dirs.update_sort(lsort)
       assign(conn, :my_app_opts , %{conn.assigns.my_app_opts | sort: lsort})
       #IO.inspect conn.assigns.my_app_opts, label: "my app opts"
         #      conn
