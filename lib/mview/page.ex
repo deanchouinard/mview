@@ -17,8 +17,12 @@ defmodule Mview.Page do
   EEx.function_from_file(:def, :mview_css,
     "templates/mview.css")
 
-  def index_page(%{dirs: dirs, sort:  sort} ) do
-    [pages_dir, label] = List.first(dirs)
+  def index_page(%{dirs: dirs, sort: sort, tab: label} ) do
+    IO.inspect dirs, label: "dirs"
+    IO.inspect label, label: "label"
+    # [pages_dir, _] = List.first(dirs) # todo: get pages_dir by looking up label in dirs?
+    [pages_dir, _] = Enum.find(dirs, fn [_, y] -> y == label end)
+    # [pages_dir, label] = List.first(dirs)
     tabs = build_tabs(dirs, label)
     page_contents = file_list(pages_dir, label, sort)
     build_page(page_contents, tabs)

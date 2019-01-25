@@ -52,6 +52,8 @@ defmodule Mview.Router do
   get "/tab/*dir" do
     conn = load_sort(conn)
     IO.inspect dir, label: "dir"
+    [label] = dir
+    Mview.Dirs.update_label(label)
     page_contents = Page.tab_page(conn.assigns.my_app_opts, dir)
 
     conn

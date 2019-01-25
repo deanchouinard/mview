@@ -1,7 +1,7 @@
 defmodule Mview.Dirs do
   use Agent
 
-  defstruct dirs: [], sort: ""
+  defstruct dirs: [], sort: "", tab: ""
 
   def start_link() do
     Agent.start_link(fn -> init_dirs() end, name: __MODULE__)
@@ -11,14 +11,19 @@ defmodule Mview.Dirs do
     Agent.update(__MODULE__, fn x -> %{x | dirs: new_dirs} end)
   end
 
+  def update_label(label) do
+    Agent.update(__MODULE__, fn x -> %{x | tab: label} end)
+  end
+
   def get_dparams() do
     Agent.get(__MODULE__, fn x -> x end)
   end
 
   def init_dirs() do
     dirs = load_subdirs()
+    [_, label] = List.first(dirs)
     sort = "chron"
-    struct(Mview.Dirs, [dirs: dirs, sort: sort])
+    struct(Mview.Dirs, [dirs: dirs, sort: sort, tab: label])
   end
 
   def load_subdirs() do
