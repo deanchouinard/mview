@@ -84,8 +84,9 @@ defmodule Mview.Router do
           new_dirs = conn.assigns.my_app_opts.dirs ++ [[page_path, file_name]]
           # dparams = %{ dirs: new_dirs, sort: "chron" }
           Mview.Dirs.update_dirs(new_dirs)
-          dparams = Mview.Dirs.get_dparams()
-          conn = assign(conn, :my_app_opts, dparams)
+          Mview.Dirs.update_label(file_name)
+          # conn = assign(conn, :my_app_opts, Mview.Dirs.get_dparams())
+          assign(conn, :my_app_opts, Mview.Dirs.get_dparams())
         else
           conn
         end
@@ -150,7 +151,7 @@ defmodule Mview.Router do
     #end
 
   defp load_session(conn, []) do
-    conn = assign(conn, :my_app_opts, Mview.Dirs.get_dparams())
+    assign(conn, :my_app_opts, Mview.Dirs.get_dparams())
   end
 
   # def load_sort(conn, []) do

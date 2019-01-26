@@ -45,19 +45,14 @@ defmodule Mview.Page do
 
   # def bootstrap, do: File.read!("static/css/bootstrap.min.css")
 
-  def show_page(%{dirs: dirs} = opts, path, stext) do
+  def show_page(%{dirs: dirs} = _opts, path, stext) do
     IO.inspect path, label: "path: "
     [label, file_name] = path
     [pages_dir, _] = find_active_tab(dirs, label)
     page_path = Path.join(pages_dir, file_name)
-    page_contents = case File.stat(page_path) do
-      {:ok, %File.Stat{ type: :directory }} -> page_contents = ["directory"]
-        add_a_tab(opts, path)
-      { _, _ } ->
-        page_contents = [ insert_find_script(stext) ]
-        page_contents = [ page_contents | File.read!(page_path)
-                        |> Earmark.as_html!(%Earmark.Options{breaks: true}) ]
-    end
+    page_contents = [ insert_find_script(stext) ]
+    page_contents = [ page_contents | File.read!(page_path)
+      |> Earmark.as_html!(%Earmark.Options{breaks: true}) ]
     build_page(page_contents, file_name)
   end
 
@@ -72,16 +67,16 @@ defmodule Mview.Page do
         results = Enum.map(results, fn x -> make_link(x.text, x.fname, label, stext) end)
         results = ["<table class=\"table-condensed\"><thead><tr><th>Results</th>
                 <th>Filename</th></thead><tbody>" | results]
-        results = List.insert_at(results, -1, ["</tbody></table>"])
+        List.insert_at(results, -1, ["</tbody></table>"])
     end
     build_page(results)
   end
 
-  defp search_file(pages_dir, file, stext, label) do
-    File.stream!(Path.join(pages_dir, file))
-    |> Enum.filter(&(String.contains?(&1, stext)))
-    |> Enum.map(&(make_link(&1, file, label)))
-  end
+  # defp search_file(pages_dir, file, stext, label) do
+  #   File.stream!(Path.join(pages_dir, file))
+  #   |> Enum.filter(&(String.contains?(&1, stext)))
+  #   |> Enum.map(&(make_link(&1, file, label)))
+  # end
 
   defp make_link(match, file, label, stext) do
     """
@@ -205,7 +200,4 @@ defmodule Mview.Page do
 
   def find_active_tab(dirs, label), do: Enum.find(dirs, fn([_a, b] = _x) -> b  == label end)
 
-  def add_a_tab(opts, path) do
-
-  end
 end
