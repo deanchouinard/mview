@@ -79,6 +79,7 @@ defmodule Mview.Page do
   # end
 
   defp make_link(match, file, label, stext) do
+    IO.inspect stext, label: "stext URI encode"
     """
     <tr>
     <td>

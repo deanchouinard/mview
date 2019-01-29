@@ -6,7 +6,7 @@ defmodule MviewTest do
 
   # @opts Mview.Router.init([pages_dir: "/Users/dean/wrk/elixir/dwiki/test/pages"])
   @opts Mview.Router.init(dirs:
-  [["/Users/dean/wrk/elixir/dwiki/test/pages","TechNotes"]])
+  [["/home/deanchouinard/wrk/elixir/mview/test/test_data","Journal"]])
 
   test "plug root" do
     conn = conn(:get, "/", "")
@@ -14,7 +14,7 @@ defmodule MviewTest do
 
     assert conn.state == :sent
     assert conn.status == 200
-    assert conn.resp_body =~ "first.md"
+    assert conn.resp_body =~ "test.md"
   end
 
   @tag :skip

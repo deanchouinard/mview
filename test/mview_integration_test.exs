@@ -14,22 +14,22 @@ defmodule MviewIntegrationTest do
     response = HTTPoison.get! "http://localhost:4000/"
     assert %HTTPoison.Response{status_code: 200} = response
     assert %HTTPoison.Response{body: body} = response
-    assert body =~ "first.md"
+    assert body =~ "test.md"
   end
 
   test "shows tab page" do
-    response = HTTPoison.get! "http://localhost:4000/tab/Writing"
+    response = HTTPoison.get! "http://localhost:4000/tab/Journal"
     assert %HTTPoison.Response{status_code: 200} = response
     assert %HTTPoison.Response{body: body} = response
-    assert body =~ "first.md"
-    assert body =~ "<li class=\"active\"><a href=\"/tab/Writing\">Writing</a></li>"
+    assert body =~ "test.md"
+    assert body =~ "<a class=\"nav-link active\" href=\"/tab/Journal\">Journal</a>"
   end
 
   test "shows a  page" do
-    response = HTTPoison.get! "http://localhost:4000/page/Writing/first.md"
+    response = HTTPoison.get! "http://localhost:4000/page/Journal/test.md"
     assert %HTTPoison.Response{status_code: 200} = response
     assert %HTTPoison.Response{body: body} = response
-    assert body =~ "another edit"
+    assert body =~ "test file"
   end
 
   @tag :pending
@@ -74,11 +74,11 @@ defmodule MviewIntegrationTest do
     assert body =~ "search"
 
     text = "first"
-    response = HTTPoison.post! "http://localhost:4000/search/Writing",
-      {:form, [stext: text]}, [{"Content-Type", "application/x-www-form-urlencoded"}]
+    response = HTTPoison.post!("http://localhost:4000/search/Journal",
+    {:form, [stext: "text"]}, %{"Content-Type" => "application/x-www-form-urlencoded"})
     assert %HTTPoison.Response{status_code: 200} = response
     assert %HTTPoison.Response{body: body} = response
-    assert body =~ "<a href=/page/Writing/first.md>### first.md"
+    assert body =~ "No matches"
   end
 
 end

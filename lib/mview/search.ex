@@ -14,7 +14,7 @@ defmodule Mview.Search do
   """
   def search( path, stext ) do
 
-    case System.cmd("grep", ["-ni", "#{stext}" | Path.wildcard("#{path}/*")]) do
+    case System.cmd("grep", ["-niHdskip", "#{stext}" | Path.wildcard("#{path}/*")]) do
       { matches, 0 } -> String.split(matches, "\n", trim: true) |> Enum.map(fn x -> new_search_result(x) end)
       { _, _ } -> ["No matches."]
     end
