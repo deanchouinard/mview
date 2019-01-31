@@ -54,7 +54,7 @@ defmodule Mview.Router do
     IO.inspect dir, label: "dir"
     [label] = dir
     Mview.Dirs.update_label(label)
-    page_contents = Page.tab_page(conn.assigns.my_app_opts, dir)
+    page_contents = Page.tab_page(conn.assigns.my_app_opts, label)
 
     conn
     |> put_resp_content_type("text/html")
@@ -92,7 +92,7 @@ defmodule Mview.Router do
         end
         IO.inspect conn.assigns.my_app_opts, label: "assigns before tab page"
         IO.inspect file_name, label: "file name before tab page"
-        page_contents = Page.tab_page(conn.assigns.my_app_opts, [file_name])
+        page_contents = Page.tab_page(conn.assigns.my_app_opts, file_name)
         {conn, page_contents}
       _ ->
         page_contents =

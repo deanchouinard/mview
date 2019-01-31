@@ -15,6 +15,16 @@ defmodule MviewPageTest do
     assert label == "One"
   end
 
+#  @tag :pending
+  test "builds correct active tab" do
+    # dparams = %{dirs: [], sort: "", tab: ""}
+    # label = ["Two"]
+    # dirs = "foo"
+    %Mview.Dirs{dirs: dirs, sort: sort, tab: label} = Mview.Dirs.init_dirs()
+    page = Page.tab_page(%{dirs: dirs, sort: sort}, label)
+    assert page =~ "<a class=\"nav-link active\" href=\"/tab/Journal\">Journal</a></li>"
+  end
+  
 
 end
 

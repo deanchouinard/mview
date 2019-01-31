@@ -33,14 +33,6 @@ defmodule MviewIntegrationTest do
   end
 
   @tag :pending
-  test "builds correct active tab" do
-    label = ["Two"]
-    dirs = "foo"
-    page = Page.tab_page(dirs, label)
-    assert page =~ "<li class=\"active\"><a href=\"/tab/Two}\">Two</a></li>"
-  end
-  
-  @tag :pending
   test "edit and save a page" do
     response = HTTPoison.get! "http://localhost:4000/first.md"
 
@@ -73,12 +65,12 @@ defmodule MviewIntegrationTest do
     assert %HTTPoison.Response{body: body} = response
     assert body =~ "search"
 
-    text = "first"
+    text = "test"
     response = HTTPoison.post!("http://localhost:4000/search/Journal",
-    {:form, [stext: "text"]}, %{"Content-Type" => "application/x-www-form-urlencoded"})
+    {:form, [stext: text]}, %{"Content-Type" => "application/x-www-form-urlencoded"})
     assert %HTTPoison.Response{status_code: 200} = response
     assert %HTTPoison.Response{body: body} = response
-    assert body =~ "No matches"
+    assert body =~ "a test file"
   end
 
 end

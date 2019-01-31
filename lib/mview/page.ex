@@ -36,7 +36,7 @@ defmodule Mview.Page do
     layout_page_template(show_page_template(page_contents, tabs))
   end
 
-  def tab_page(%{dirs: dirs, sort: sort}, [label] = _x) do
+  def tab_page(%{dirs: dirs, sort: sort}, label) do
     [pages_dir, label] = find_active_tab(dirs, label)
     tabs = build_tabs(dirs, label)
     page_contents = file_list(pages_dir, label, sort)
@@ -58,12 +58,10 @@ defmodule Mview.Page do
 
   def search_results(%{dirs: dirs}, stext, [label] = _t) do
     [pages_dir, _] = find_active_tab(dirs, label)
-    IO.inspect stext, label: "stext: "
 
     results = case Search.search(pages_dir, stext) do
       ["No matches."] -> "No matches"
       results ->
-        IO.inspect(results)
         results = Enum.map(results, fn x -> make_link(x.text, x.fname, label, stext) end)
         results = ["<table class=\"table-condensed\"><thead><tr><th>Results</th>
                 <th>Filename</th></thead><tbody>" | results]
@@ -79,7 +77,6 @@ defmodule Mview.Page do
   # end
 
   defp make_link(match, file, label, stext) do
-    IO.inspect stext, label: "stext URI encode"
     """
     <tr>
     <td>

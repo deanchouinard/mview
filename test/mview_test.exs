@@ -5,8 +5,9 @@ defmodule MviewTest do
   doctest Mview
 
   # @opts Mview.Router.init([pages_dir: "/Users/dean/wrk/elixir/dwiki/test/pages"])
-  @opts Mview.Router.init(dirs:
-  [["/home/deanchouinard/wrk/elixir/mview/test/test_data","Journal"]])
+  # @opts Mview.Router.init(dirs:
+  # [["/home/deanchouinard/wrk/elixxir/mview/test/test_data","Journal"]])
+  @opts Mview.Router.init([])
 
   test "plug root" do
     conn = conn(:get, "/", "")
@@ -17,7 +18,6 @@ defmodule MviewTest do
     assert conn.resp_body =~ "test.md"
   end
 
-  @tag :skip
   test "plug returns 404" do
     conn = conn(:get, "/missing", "")
       |> Mview.Router.call(@opts)
