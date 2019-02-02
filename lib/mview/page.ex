@@ -62,7 +62,7 @@ defmodule Mview.Page do
     results = case Search.search(pages_dir, stext) do
       ["No matches."] -> "No matches"
       results ->
-        results = Enum.map(results, fn x -> make_link(x.text, x.fname, label, stext) end)
+        results = Enum.map(results, fn x -> make_link(x.text, x.fname, x.line, label, stext) end)
         results = ["<table class=\"table-condensed\"><thead><tr><th>Results</th>
                 <th>Filename</th></thead><tbody>" | results]
         List.insert_at(results, -1, ["</tbody></table>"])
@@ -76,12 +76,12 @@ defmodule Mview.Page do
   #   |> Enum.map(&(make_link(&1, file, label)))
   # end
 
-  defp make_link(match, file, label, stext) do
+  defp make_link(match, file, line, label, stext) do
     """
     <tr>
     <td>
     <a href=/page/#{label}/#{file}?stext=#{URI.encode(stext)}>#{match}</a> </td>
-    <td>#{file}</br> </td>
+    <td>#{file}:#{line}</br> </td>
     </tr>
     """
   end

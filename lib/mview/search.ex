@@ -25,7 +25,7 @@ defmodule Mview.Search do
     # IO.inspect str, label: "new search res: "
     [file, lnum, stext] = String.split(str, ~r{:([0-9]+):}, parts: 2, include_captures: true)
     fname = file |> Path.split() |> List.last
-    %SearchResult{ fname: fname, line: lnum, text: stext }
+    %SearchResult{ fname: fname, line: String.replace(lnum, ":", ""), text: stext }
   end
 end
 
