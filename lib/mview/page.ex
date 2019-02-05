@@ -56,7 +56,8 @@ defmodule Mview.Page do
     build_page(page_contents, file_name)
   end
 
-  def search_results(%{dirs: dirs}, stext, [label] = _t) do
+  #def search_results(%{dirs: dirs}, stext, [label] = _t) do
+  def search_results(%{dirs: dirs}, stext, label) do
     [pages_dir, _] = find_active_tab(dirs, label)
 
     results = case Search.search(pages_dir, stext) do

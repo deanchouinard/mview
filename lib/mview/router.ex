@@ -109,7 +109,7 @@ defmodule Mview.Router do
   post "/search/*tab" do
     page_text = conn.params["stext"]
     page_contents = Page.search_results(conn.assigns.my_app_opts,
-    page_text, tab)
+    page_text, hd(tab))
 
     conn
     |> put_resp_content_type("text/html")
