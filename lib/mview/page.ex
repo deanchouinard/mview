@@ -81,10 +81,16 @@ defmodule Mview.Page do
     """
     <tr>
     <td>
-    <a href=/page/#{label}/#{file}?stext=#{URI.encode(stext)}>#{match}</a> </td>
+    <a href=/page/#{label}/#{file}?stext=#{URI.encode(stext)}>#{remove_angle_brackets(match)}</a> </td>
     <td>#{file}:#{line}</br> </td>
     </tr>
     """
+  end
+
+  defp remove_angle_brackets(str) do
+    str
+    |> String.replace("<", "")
+    |> String.replace(">", "")
   end
 
   defp insert_find_script(stext) do
