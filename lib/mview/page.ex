@@ -52,7 +52,8 @@ defmodule Mview.Page do
     page_path = Path.join(pages_dir, file_name)
     page_contents = [ insert_find_script(stext) ]
     page_contents = [ page_contents | File.read!(page_path)
-      |> Earmark.as_html!(%Earmark.Options{breaks: true}) ]
+                    |> Earmark.as_html!(%Earmark.Options{breaks: true})
+                    |> String.replace("<blockquote>", "<blockquote class=\"blockquote\">") ]
     build_page(page_contents, file_name)
   end
 
