@@ -1,5 +1,13 @@
 # Test file
 This a test file in the Journal directory.
+
+* bullet list
+  * indented
+* this is a list that is on multiple lines; the formatting
+seems to get messed up
+  * this is a second level and now lets
+see when it goes on second line
+
 ```
 This is code
 another line of code

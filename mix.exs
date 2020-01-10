@@ -37,7 +37,7 @@ defmodule Mview.Mixfile do
   defp deps do
     [{:plug_cowboy, "~> 2.0"},
   #    {:plug, "~> 1.0"},
-      {:earmark, "~> 1.0"},
+      {:earmark, "~> 1.4"},
       {:httpoison, "~> 1.4", only: :test},
       {:floki, "~> 0.12.0", only: :test}
     ]
