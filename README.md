@@ -27,7 +27,7 @@ subdirectories.
 5. Browse to localhost:4100
 
 ### Mix Task
-A mix task to build and copy mview: ``mix wrt``
+A mix task to build and copy mview: ``mix mview.wrt``
 
 ### Note about directory structure
 Mview expects to be run in a parent directory with subdirectories containing your
