@@ -6,9 +6,12 @@ defmodule Mview.Convert do
 
     #    :os.cmd('echo \"#{source}\" | pandoc')
 
-    {contents, _} = System.cmd("pandoc", [page_path, "-f", "gfm+hard_line_breaks", "-t", "html"])
-    contents = String.replace(contents, ~r/\[\[(.+)\]\]/, 
-      "<a href='http://penguin.linux.test:4000/page/\\1' target='_blank'>\\1</a>")
+    {contents, status} = System.cmd("pandoc", [page_path, "-f", "gfm+hard_line_breaks", "-t", "html"])
+    IO.inspect status, label: "pandoc status:"
+    contents = case status do
+      0 -> contents
+      _ -> "<br/>File not found."
+    end
   end
 
 end

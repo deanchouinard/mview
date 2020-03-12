@@ -42,6 +42,13 @@ At the end
 ### Internal Links
 [[Technical/tech.md]]
 
+[[Technical/xxxx.md]]
+Link does not exist.
+
+[[notes/note.md]]
+This link will fail until *notes* dir is added into the `dirs` map. Recall that since the *notes*
+dir is not initially scanned it doesn't get into the `dirs` map until it is clicked.
+
 Noticed a problem displaying links in the search results:
 <http://www.catmountain.com/test>
 
