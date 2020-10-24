@@ -51,7 +51,8 @@ defmodule Mview.Page do
     [pages_dir, _] = find_active_tab(dirs, label)
     page_path = Path.join(pages_dir, file_name)
     page_contents = [ insert_find_script(stext) ]
-    page_contents = [ page_contents | expand_internal_links(Mview.Convert.as_html!(page_path)) ]
+    # page_contents = [ page_contents | expand_internal_links(Mview.Convert.as_html!(page_path)) ]
+    page_contents = [ page_contents | Mview.Parse.parse_page(Mview.Convert.as_html!(page_path)) ]
 
     # page_contents = [ page_contents | File.read!(page_path)
     #                 |> Mview.Convert.as_html!() # Earmark.as_html!(%Earmark.Options{breaks: false})

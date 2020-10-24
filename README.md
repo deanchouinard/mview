@@ -34,6 +34,13 @@ Mview expects to be run in a parent directory with subdirectories containing you
 Markdown files. It does not display the contents of the parent directory other than
 building a tab listing your files for each subdirectory.
 
+### Running in Development Mode and Tests
+To run in development mode use `mix run --no-halt`. Browse to `localhost:4000`
+to view the sample pages.
+To run tests use `mix test`.
+A set of sample pages is kept in the `pages` directory. Both tests and development mode
+use these pages to exercise features.
+
 # Archive
 
 Lists files from a directory. Clicking a link will display the file. Searching
