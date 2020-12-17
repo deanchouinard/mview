@@ -70,10 +70,12 @@ defmodule Mview.Page do
       ["No matches."] -> "No matches"
       results ->
         results = Enum.map(results, fn x -> make_link(x.text, x.fname, x.line, label, stext) end)
+        IO.inspect results, label: "results"
         results = ["<table class=\"table-condensed\"><thead><tr><th>Results</th>
                 <th>Filename</th></thead><tbody>" | results]
         List.insert_at(results, -1, ["</tbody></table>"])
     end
+        IO.inspect results, label: "results"
     build_page(results)
   end
 
@@ -87,7 +89,7 @@ defmodule Mview.Page do
     """
     <tr>
     <td>
-    <a href=/page/#{label}/#{file}?stext=#{URI.encode(stext)}>#{remove_angle_brackets(match)}</a> </td>
+    <a href=/page/#{label}/#{URI.encode(file)}?stext=#{URI.encode(stext)}>#{remove_angle_brackets(match)}</a> </td>
     <td>#{file}:#{line}</br> </td>
     </tr>
     """
