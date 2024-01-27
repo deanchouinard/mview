@@ -30,14 +30,14 @@ blockquote {
     font-size: $base-font-size;
     line-height: $base-line-height;
 /*    font-weight: 100; */
-    &:before, &:after {
+/*    &:before, &:after {
     content: '\201C';
     font-family: 'Sanchez';
     color: lighten($black, 60%);
     }
     &:after {
       content: '\201D';
-    }
+    }*/
 }
 
 

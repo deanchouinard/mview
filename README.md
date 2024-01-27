@@ -29,6 +29,10 @@ subdirectories.
 ### Mix Task
 A mix task to build and copy mview: ``mix mview.wrt``
 
+### Linking
+You can link to another file with the `[[TechNotes/nerves.md]]` syntax.
+Note that you must specify the relative directory path from the parent directory.
+
 ### Note about directory structure
 Mview expects to be run in a parent directory with subdirectories containing your
 Markdown files. It does not display the contents of the parent directory other than
