@@ -214,7 +214,7 @@ defmodule Mview.Page do
   def find_active_tab(dirs, label), do: Enum.find(dirs, fn([_a, b] = _x) -> b  == label end)
 
 
-  defp expand_internal_links(page_contents), do: String.replace(page_contents,
-    ~r/\[\[(.+)\]\]/, "<a href='/page/\\1' target='_blank'>\\1</a>")
+#  defp expand_internal_links(page_contents), do: String.replace(page_contents,
+#    ~r/\[\[(.+)\]\]/, "<a href='/page/\\1' target='_blank'>\\1</a>")
 
 end

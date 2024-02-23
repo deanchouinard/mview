@@ -8,7 +8,7 @@ defmodule Mview.Convert do
 
     {contents, status} = System.cmd("pandoc", [page_path, "-f", "gfm+hard_line_breaks", "-t", "html"])
     IO.inspect status, label: "pandoc status:"
-    contents = case status do
+    _contents = case status do
       0 -> contents
       _ -> "<br/>File not found."
     end

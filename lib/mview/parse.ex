@@ -56,19 +56,19 @@ defmodule Mview.Parse do
 
     IO.puts file
 
-    Enum.reduce(String.graphemes(file), "", fn letter, str -> str = str <> letter end)
+    Enum.reduce(String.graphemes(file), "", fn letter, str -> _str = str <> letter end)
     
     Enum.reduce(String.graphemes(line), {"", ""}, &expand/2 )
 
   end
 
   def expand(letter, str) do
-    {acc, ss} = str
+    {acc, _ss} = str
     case letter do
       "[" ->
-        str = {acc <> "*", "["}
+        _str = {acc <> "*", "["}
       _ ->
-        str = {acc <> letter, ""}
+        _str = {acc <> letter, ""}
     end
   end
 
