@@ -56,3 +56,9 @@ How about a line on a line with text: <http://www.catmountain.com/test>
 Without brackets: http://www.catmountain.com/test
 End of file
 
+<img src="/priv/images/3.jpg" alt="drawing" width="200"/>
+
+[freelance](/priv/docs/FreelancerQuickStart.pdf)
+
+![test](/priv/images/3.jpg)
+

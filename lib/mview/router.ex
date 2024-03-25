@@ -1,5 +1,6 @@
 defmodule Mview.Router do
   use Plug.Router
+
   alias Mview.Page
 
   if Mix.env() == :dev do
@@ -7,6 +8,8 @@ defmodule Mview.Router do
   end
 
   plug Plug.Logger
+  # plug Plug.Static, at: "/static", from: :mview, only_matching: ~w(static jpg)
+  plug Plug.Static, at: "/priv", from: {:mview, "priv/"}, only: ~w(images docs )
 
   plug :load_session
   plug :match
