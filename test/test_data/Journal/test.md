@@ -62,3 +62,7 @@ End of file
 
 ![test](/priv/images/3.jpg)
 
+Trying a footnote [^1]
+
+[^1]: This is the footnote
+
