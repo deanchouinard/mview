@@ -56,13 +56,26 @@ How about a line on a line with text: <http://www.catmountain.com/test>
 Without brackets: http://www.catmountain.com/test
 End of file
 
-<img src="/priv/images/3.jpg" alt="drawing" width="200"/>
+<img src="/images/3.jpg" alt="drawing" width="200"/>
 
-[freelance](/priv/docs/FreelancerQuickStart.pdf)
+[freelance](/docs/FreelancerQuickStart.pdf)
 
-![test](/priv/images/3.jpg)
+![test](/images/3.jpg)
 
 Trying a footnote [^1]
 
 [^1]: This is the footnote
+
+### Test syntax highlighting
+~~~elixir 
+defmodule Mview.Router do
+  use Plug.Router
+  plug Plug.Logger
+ 
+  plug Plug.Static, at: "/images", from: "images/"
+  plug Plug.Static, at: "/docs", from: "docs/"
+
+  plug :load_session
+end
+~~~
 

@@ -9,7 +9,9 @@ defmodule Mview.Router do
 
   plug Plug.Logger
   # plug Plug.Static, at: "/static", from: :mview, only_matching: ~w(static jpg)
-  plug Plug.Static, at: "/priv", from: {:mview, "priv/"}, only: ~w(images docs )
+  #plug Plug.Static, at: "/images", from: {:mview, "images/"}
+  plug Plug.Static, at: "/images", from: "images/"
+  plug Plug.Static, at: "/docs", from: "docs/"
 
   plug :load_session
   plug :match
