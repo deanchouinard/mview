@@ -79,3 +79,6 @@ defmodule Mview.Router do
 end
 ~~~
 
+Test "[[" on a line by itself. The link opening characters should be
+there.
+

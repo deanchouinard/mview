@@ -46,6 +46,14 @@ defmodule Mview.Router do
     |> send_resp(200, page_contents)
   end
 
+  get "/static/css/highlighting.css" do
+    page_contents = Page.highlighting_css()
+    conn
+    |> put_resp_content_type("text/css")
+    |> send_resp(200, page_contents)
+  end
+
+
   get "/clean" do
     conn = configure_session(conn, drop: true)
     conn

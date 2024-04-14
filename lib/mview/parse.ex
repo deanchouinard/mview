@@ -28,7 +28,25 @@ defmodule Mview.Parse do
 
   def parse_line(line) do
     split_list = String.split(line, "[[")
-    Enum.map(split_list, &detect_links/1)
+    case (length(split_list) > 1) do
+      true -> possible_link(split_list)
+      false -> split_list
+    end
+        
+  end
+
+  # receive a list of two string
+  # if one of them has a link closure, process as a link
+  # else prepend the link open and return
+  #
+  def possible_link(line_parts) do
+    case Enum.any?(line_parts, fn x -> String.contains?(x, "]]") end) do
+      true ->
+        Enum.map(line_parts, &detect_links/1)
+      false ->
+        List.replace_at(line_parts, 0, Enum.at(line_parts, 0) <> "[[")
+    end
+
   end
 
   def detect_links(str) do

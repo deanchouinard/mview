@@ -17,6 +17,9 @@ defmodule Mview.Page do
   EEx.function_from_file(:def, :mview_css,
     "templates/mview.css")
 
+  EEx.function_from_file(:def, :highlighting_css,
+    "templates/highlighting.css")
+
   def index_page(%{dirs: dirs, sort: sort, tab: label} ) do
     IO.inspect dirs, label: "dirs"
     IO.inspect label, label: "label"
