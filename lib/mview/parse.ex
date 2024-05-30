@@ -21,11 +21,14 @@ defmodule Mview.Parse do
 
   end
 
+  # Receive a string and break into lines. Process each line.
   def parse_page(page) do
     String.split(page, "\n") |> Enum.reduce(fn x, acc -> [acc | "#{parse_line(x)}\n"] end) |> List.to_string
 
   end
 
+  # If the line contains a link open ("[["), split the line in two and
+  # process as a possible link.
   def parse_line(line) do
     split_list = String.split(line, "[[")
     case (length(split_list) > 1) do
@@ -35,9 +38,9 @@ defmodule Mview.Parse do
         
   end
 
-  # receive a list of two string
-  # if one of them has a link closure, process as a link
-  # else prepend the link open and return
+  # receive a list of two strings
+  # if one of them has a link closure ("]]"), process as a link
+  # else append the link open ("[[") and return
   #
   def possible_link(line_parts) do
     case Enum.any?(line_parts, fn x -> String.contains?(x, "]]") end) do
@@ -49,6 +52,7 @@ defmodule Mview.Parse do
 
   end
 
+  # If the string has a link close ("]]"), we have an internal link.
   def detect_links(str) do
     case String.contains?(str, "]]") do
       true ->
@@ -58,6 +62,7 @@ defmodule Mview.Parse do
     end
   end
 
+  # make the internal link
   def expand_link(str) do
     length = String.length(str)
     {pos, len} = :binary.match(str, "]]")
