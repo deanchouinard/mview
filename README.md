@@ -1,62 +1,25 @@
-# mview
-A Markdown Viewer
+# Dwiki
 
-Mview displays and searches Markdown files. Run Mview in a directory and it
-will display a tab listing all the files in each subdirectory. Click a file
-name to display its Markdown formatted contents.
+A notebook wiki to store my notes.
 
-You can also search through the contents of files in a subdirectory. Mview will
-display a list of all files with content that matches the search. Clicking on a
-match will display the file.
+I've been using the [UseModWiki](http://www.usemod.com/cgi-bin/wiki.pl) for
+years at work to record my notes. I find it quick to enter text and then easy
+to find stuff later. It enables me to organize information hierarchically with
+separate pages for each topic or subtopic. Searching the whole page
+database is convenient via a search box available on every page.
 
-I use Mview every day. I keep most of my writing in small Markdown formatted
-text files located in several topical subdirectories. With Mview I can easily
-view and search my files.
+It also has been fairly easy to get running on the series of Windows workstations
+I've used throughout the years since it is just a single Perl script. However,
+it does require some knowledge of a web server to get running.
 
-I started this project as a way to learn Plug. Along the way I not only
-learned about Plug but also came to appreciate the capabilities and
-conveniences of Phoenix.
+For the markup language I decided to use Markdown. Mostly because I already
+use it and have a lot of documents in that format, and it was easy to
+integrate a parser, Earmark.
 
 
-## Usage
-1. Clone the project
-2. Build the escript
-3. Copy the mview executable to the directory containing your writing
-subdirectories.
-4. ./mview
-5. Browse to localhost:4100
+Based upon Ward Cunningham's and Bo Leuf's Quickwiki in the book:
 
-### Mix Task
-A mix task to build and copy mview: ``mix mview.wrt``
 
-### Linking
-You can link to another file with the `[[TechNotes/nerves.md]]` syntax.
-Note that you must specify the relative directory path from the parent directory.
-
-### Note about directory structure
-Mview expects to be run in a parent directory with subdirectories containing your
-Markdown files. It does not display the contents of the parent directory other than
-building a tab listing your files for each subdirectory.
-
-### Running in Development Mode and Tests
-To run in development mode use `mix run --no-halt`. Browse to `localhost:4000`
-to view the sample pages.
-To run tests use `mix test`.
-A set of sample pages is kept in the `pages` directory. Both tests and development mode
-use these pages to exercise features.
-
-# Archive
-
-Lists files from a directory. Clicking a link will display the file. Searching
-displays matches and clicking a match will display the file.
-
-Almost like a wiki except cannot edit the file. File editing is done with
-another program such as a text editor or Markdown editor.
-
-I built this for my own use. I have a lot of Markdown files and this makes it
-easy to search and view their formatted representation.
-
-Aside from my motivation to view my Markdown files, I also wanted to
-experiment with Plug. So, a lot of what you see here are my explorations
-in Plug.
+### Future
+Turn into a "bliki".
 

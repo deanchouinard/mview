@@ -1,46 +1,44 @@
-defmodule Mview.Mixfile do
+defmodule Dwiki.MixProject do
   use Mix.Project
 
   def project do
-    [app: :mview,
-     version: "0.2.0",
-     elixir: "~> 1.5",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     escript: escript(),
-     deps: deps()]
+    [
+      app: :dwiki,
+      version: "0.1.0",
+      elixir: "~> 1.5",
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      start_permanent: Mix.env() == :prod,
+      deps: deps()
+    ]
   end
 
-  def escript do
-    [main_module: Mview]
-  end
-
-  # Configuration for the OTP application
+  # Configuration for the OTP application.
   #
-  # Type "mix help compile.app" for more information
+  # Type `mix help compile.app` for more information.
   def application do
-    # [applications: [:logger, :mix, :eex, :cowboy, :plug, :httpoison],
-    # [applications: [:logger, :mix, :plug_cowboy, :httpoison ],
-    [extra_applications: [:logger, :mix],
-     mod: {Mview, []}]
+    [
+      mod: {Dwiki.Application, []},
+      extra_applications: [:logger, :runtime_tools]
+    ]
   end
 
-  # Dependencies can be Hex packages:
+  # Specifies which paths to compile per environment.
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
+
+  # Specifies your project dependencies.
   #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
-  #
-  # Type "mix help deps" for more examples and options
+  # Type `mix help deps` for examples and options.
   defp deps do
-    [{:plug_cowboy, "~> 2.7"},
-  #    {:plug, "~> 1.0"},
-      {:plug, "~> 1.15"},
-      {:earmark, "~> 1.4"},
-      {:httpoison, "~> 1.4", only: :test},
-      {:floki, "~> 0.12.0", only: :test}
+    [
+      {:phoenix, "~> 1.4.1"},
+      {:phoenix_pubsub, "~> 1.1"},
+      {:phoenix_html, "~> 2.11"},
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:gettext, "~> 0.11"},
+      {:jason, "~> 1.0"},
+      {:plug_cowboy, "~> 2.0"}
     ]
   end
 end
