@@ -1,0 +1,48 @@
+/*.table-borderless td,
+.table-borderless th {
+  border: 0;
+  padding: 0
+}
+*/
+
+/*pre {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+    font-family: monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 1.6em;
+    max-width: 100%;
+    overflow: auto;
+    padding: 1em 1.5em;
+    display: block;
+    word-wrap: break-word;
+}*/
+
+pre {
+  margin-left: 50px;
+}
+pre.sourceCode {
+  margin-left: 50px;
+}
+
+blockquote {
+  position: relative;
+  padding-left: 1em;
+  border-left: 0.2em solid rgba(2, 1, 0, .3);
+    font-family: 'Roboto', serif;
+    font-size: medium ;
+    line-height: 1;
+}
+
+table {
+/*  line-height: .75;*/
+  margin: 20px
+}
+
+  /* lighten($black, 60%);
+    font-size: $base-font-size;
+    line-height: $base-line-height;
+
+*/

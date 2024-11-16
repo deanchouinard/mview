@@ -1,0 +1,43 @@
+.table-borderless td,
+.table-borderless th {
+  border: 0;
+  padding: 0
+}
+
+pre {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+/*    border-left: 3px solid #f36d33;
+    color: #666; */
+    page-break-inside: avoid;
+    font-family: monospace;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 1.6em;
+    max-width: 100%;
+    overflow: auto;
+    padding: 1em 1.5em;
+    display: block;
+    word-wrap: break-word;
+}
+
+blockquote {
+  position: relative;
+  padding-left: 1em;
+  border-left: 0.2em solid;
+  lighten($black, 60%);
+    font-family: 'Roboto', serif;
+    font-size: $base-font-size;
+    line-height: $base-line-height;
+/*    font-weight: 100; */
+/*    &:before, &:after {
+    content: '\201C';
+    font-family: 'Sanchez';
+    color: lighten($black, 60%);
+    }
+    &:after {
+      content: '\201D';
+    }*/
+}
+
+

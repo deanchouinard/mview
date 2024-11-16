@@ -1,10 +1,3 @@
 use Mix.Config
-
-# We don't run a server during test. If one is required,
-# you can enable the server option below.
-config :dwiki, DwikiWeb.Endpoint,
-  http: [port: 4002],
-  server: false
-
-# Print only warnings and errors during test
-config :logger, level: :warn
+config :mview, cowboy_port: 4000
+config :mview, data_path: "test/test_data"
