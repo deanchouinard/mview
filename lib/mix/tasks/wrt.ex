@@ -9,8 +9,8 @@ defmodule Mix.Tasks.Mview.Wrt do
     Mix.Shell.IO.cmd("MIX_ENV=prod mix escript.build")
     # Mix.Shell.IO.info("build escript")
     # Mix.Shell.IO.cmd("cp /Users/dean/wrk/elixir/mview/mview /Users/dean/wrk/wrt/")
-    Mix.Shell.IO.cmd("cp /home/deanchouinard/wrk/elixir/mview/mview /home/deanchouinard/wrk/wrt/")
-    Mix.Shell.IO.cmd("ls -al /home/deanchouinard/wrk/wrt/mview")
+    Mix.Shell.IO.cmd("cp /home/dean/wrk/elixir/mview/mview /home/dean/wrk/wrt/")
+    Mix.Shell.IO.cmd("ls -al /home/dean/wrk/wrt/mview")
   end
 
 end

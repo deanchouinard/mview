@@ -40,7 +40,8 @@ defmodule Mview.Mixfile do
       {:plug, "~> 1.15"},
       {:earmark, "~> 1.4"},
       {:httpoison, "~> 1.4", only: :test},
-      {:floki, "~> 0.12.0", only: :test}
+      #{:floki, "~> 0.12.0", only: :test}
+      {:floki, "~> 0.38.0"}
     ]
   end
 end

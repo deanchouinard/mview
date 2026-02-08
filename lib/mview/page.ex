@@ -12,7 +12,7 @@ defmodule Mview.Page do
   # EEx.function_from_file(:def, :bootstrap,
   #   "static/css/bootstrap.min.css")
   EEx.function_from_file(:def, :bootstrap,
-    "/home/deanchouinard/media/bootstrap-4.2.1-dist/css/bootstrap.min.css")
+    "/home/dean/media/bootstrap-4.2.1-dist/css/bootstrap.min.css")
     # "static/css/bootstrap.min.css")
   EEx.function_from_file(:def, :mview_css,
     "templates/mview.css")
@@ -49,6 +49,7 @@ defmodule Mview.Page do
   # def bootstrap, do: File.read!("static/css/bootstrap.min.css")
 
   def show_page(%{dirs: dirs} = _opts, path, stext) do
+    IO.inspect dirs, label: "dirs"
     IO.inspect path, label: "path: "
     [label, file_name] = path
     [pages_dir, _] = find_active_tab(dirs, label)
@@ -56,13 +57,14 @@ defmodule Mview.Page do
     page_contents = [ insert_find_script(stext) ]
     # page_contents = [ page_contents | expand_internal_links(Mview.Convert.as_html!(page_path)) ]
     page_contents = [ page_contents | Mview.Parse.parse_page(Mview.Convert.as_html!(page_path)) ]
+      |> LinkParser.add_target_blank()
 
     # page_contents = [ page_contents | File.read!(page_path)
     #                 |> Mview.Convert.as_html!() # Earmark.as_html!(%Earmark.Options{breaks: false})
     #                 |> IO.inspect(label: "convert")
     # ]
       # |> String.replace("<blockquote>", "<blockquote class=\"blockquote\">") ]
-    build_page(page_contents, file_name)
+    build_page(page_contents, file_name) 
   end
 
   #def search_results(%{dirs: dirs}, stext, [label] = _t) do
