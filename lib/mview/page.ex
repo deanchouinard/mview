@@ -213,7 +213,14 @@ defmodule Mview.Page do
 
 
   defp make_file_link(file, dt, label) do
-    "<tr><td><a href=/page/#{label}/#{URI.encode(file)}>#{file}</a></td><td>#{dtos(dt)}</td></tr>"
+    cond do
+      label == "images" ->
+        "<tr><td><a href=/#{label}/#{URI.encode(file)}>#{file}</a></td><td>#{dtos(dt)}</td></tr>"
+      label == "docs" ->
+        "<tr><td><a href=/#{label}/#{URI.encode(file)}>#{file}</a></td><td>#{dtos(dt)}</td></tr>"
+      true ->
+        "<tr><td><a href=/page/#{label}/#{URI.encode(file)}>#{file}</a></td><td>#{dtos(dt)}</td></tr>"
+    end
   end
 
   def find_active_tab(dirs, label), do: Enum.find(dirs, fn([_a, b] = _x) -> b  == label end)
